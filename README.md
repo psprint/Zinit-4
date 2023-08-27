@@ -67,58 +67,6 @@
 
 [hello][gitter-link]
 
-<!-- mdformat-toc start --slug=github --maxlevel=6 --minlevel=2 -->
-
-- [Zinit Wiki](#zinit-wiki)
-- [Install](#install)
-  - [Automatic](#automatic)
-  - [Manual](#manual)
-- [Usage](#usage)
-  - [Introduction](#introduction)
-  - [Plugins and snippets](#plugins-and-snippets)
-  - [Upgrade Zinit and plugins](#upgrade-zinit-and-plugins)
-  - [Turbo and lucid](#turbo-and-lucid)
-  - [Migration](#migration)
-- [Frequently Asked Questions](#frequently-asked-questions)
-  - [Use `zi ice svn` if a plugin/snippet requires an entire subdirectory](#use-zi-ice-svn-if-a-pluginsnippet-requires-an-entire-subdirectory)
-  - [Use `zi ice as'completion'` to directly add single file completion snippets](#use-zi-ice-ascompletion-to-directly-add-single-file-completion-snippets)
-  - [More Examples](#more-examples)
-- [Ice Modifiers](#ice-modifiers)
-  - [Cloning Options](#cloning-options)
-  - [Selection of Files (To Source, …)](#selection-of-files-to-source-%E2%80%A6)
-  - [Conditional Loading](#conditional-loading)
-  - [Plugin Output](#plugin-output)
-  - [Completions](#completions)
-  - [Command Execution After Cloning, Updating or Loading](#command-execution-after-cloning-updating-or-loading)
-  - [Sticky-Emulation Of Other Shells](#sticky-emulation-of-other-shells)
-  - [Others](#others)
-  - [Order of Execution](#order-of-execution)
-- [Zinit Commands](#zinit-commands)
-  - [Help](#help)
-  - [Loading and Unloading](#loading-and-unloading)
-  - [Completions](#completions-1)
-  - [Tracking of the Active Session](#tracking-of-the-active-session)
-  - [Reports and Statistics](#reports-and-statistics)
-  - [Compiling](#compiling)
-  - [Other](#other)
-- [Updating Zinit and Plugins](#updating-zinit-and-plugins)
-- [Completions](#completions-2)
-  - [Calling `compinit` Without Turbo Mode](#calling-compinit-without-turbo-mode)
-  - [Calling `compinit` With Turbo Mode](#calling-compinit-with-turbo-mode)
-  - [Ignoring Compdefs](#ignoring-compdefs)
-  - [Disabling System-Wide `compinit` Call (Ubuntu)](#disabling-system-wide-compinit-call-ubuntu)
-- [Zinit Module](#zinit-module)
-- [Hints and Tips](#hints-and-tips)
-  - [Using ZPFX variable](#using-zpfx-variable)
-  - [Customizing Paths](#customizing-paths)
-  - [Non-GitHub (Local) Plugins](#non-github-local-plugins)
-  - [Extending Git](#extending-git)
-- [Changelog](#changelog)
-- [Support](#support)
-- [Getting Help and Community](#getting-help-and-community)
-
-<!-- mdformat-toc end -->
-
 <p align="center">
 <a href="https://github.com/zdharma-continuum/pm-perf-test">
 <img width="550px" src="https://raw.githubusercontent.com/zdharma-continuum/zinit/images/startup-times.png"/>
