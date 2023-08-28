@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=z4
+Exec=
+Icon=z4
+Type=Application
+Categories=Utility;FileTools;ConsoleOnly;
+Keywords=zsh;zshell;tui-app;textual-interface;
+Comment=A plugin for Zshell
+MimeType=inode/directory;
+Name[en]=z4
+Terminal=true
+StartupNotify=true
+NoDisplay=false
+X-AppImage-Version=4.0.0

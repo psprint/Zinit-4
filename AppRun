@@ -1,0 +1,69 @@
+#!/usr/bin/env zsh
+
+builtin emulate -L zsh -o extendedglob -o typesetsilent \
+                -o noshortloops -o warncreateglobal
+
+integer QEC=$?
+
+##
+## Get source directory and load functions
+##
+
+0=${${ZERO:-${(%):-%x}}:A}
+[[ -f $0 ]];QEC+=$?
+[[ $0:h == $APPDIR:A ]];QEC+=$?
+fpath+=($0:h/functions)
+source $0:h/lib/appimage-functions.zsh;QEC+=$?
+if ((QEC));then
+    builtin print -r -P -- %B%F{1}Error:%b non-zero error code \
+                \(%F{27}$QEC%F{1}\)occurred, exiting…
+    exit QEC
+fi
+
+builtin autoload -Uz -- catch throw
+
+local -a match mbegin mend reply opts
+local MATCH REPLY T1 T3
+integer MBEGIN MEND
+local -A Opts
+
+z4::load-colors||exit 1
+z4::parse-opts Opts opts "$@"||exit 1
+
+##
+## Variables
+##
+
+local CVER NVER VERF
+local CDIR_PFX=${XDG_DATA_HOME:-$HOME/.local}/\
+share/zinit/zinit \
+    CACHE_DIR=${XDG_CACHE_HOME:-$HOME/.cache}/z4
+command mkdir -p $CACHE_DIR
+
+##
+## MAIN ACTIONS (opts: -I/--INSTALL, -E/--EVAL, -R/--RUN)
+##
+
+z4::install-version-check $CDIR_PFX $APPDIR
+CVER=$reply[1] NVER=$reply[2] VERF=$reply[3]
+
+# (-i/--install) Install?
+local CVER NVER VERF
+if ((Opts[-i]));then
+    if [[ $NVER != $CVER ]]; then
+        CVER=$reply[1] NVER=$reply[2] VERF=$reply[3]
+        z4::install $APPDIR $VERF:h
+    fi
+fi
+
+[[ -z $NVER ]]&&NVER=$(<$APPDIR/version.dat)
+
+# (-e/--eval) Output load code?
+if ((Opts[-e]));then
+    z4::eval-code $APPDIR $VERF:h $NVER $CVER
+fi
+
+# (-r/--run) Run?
+if ((Opts[-r]));then
+    z4::run $VERF:h $NVER
+fi

@@ -3189,8 +3189,18 @@ zpcompdef() {
 # Source-executed code.
 #
 
+# code [[[
+if [[ -z $ZINIT[NO_ALIASES] ]]; then
+    builtin alias zi=zinit z4=zinit
+fi
+
 (( ZINIT[ALIASES_OPT] )) && builtin setopt aliases
-(( ZINIT[SOURCED] ++ )) && return
+
+if [[ -f ~/.zsh-plugins.zsh && $ZINIT[NO_PLGS_SRC] != 1 ]];then
+    builtin source ~/.zsh-plugins.zsh
+fi
+
+(( ZINIT[SOURCED] ++ )) && return 0
 
 autoload add-zsh-hook
 if { zmodload zsh/datetime } {
@@ -3200,11 +3210,6 @@ if { zmodload zsh/datetime } {
 functions -M -- zinit_scheduler_add 1 1 -zinit_scheduler_add_sh 2>/dev/null
 zmodload zsh/zpty zsh/system 2>/dev/null
 zmodload -F zsh/stat b:zstat 2>/dev/null && ZINIT[HAVE_ZSTAT]=1
-
-# code [[[
-if [[ -z $ZINIT[NO_ALIASES] ]]; then
-    builtin alias zpl=zinit zplg=zinit zi=zinit zini=zinit
-fi
 
 .zinit-prepare-home
 
