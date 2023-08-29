@@ -1,0 +1,5 @@
+*~
+.git
+*.AppImage
+*.mg
+*.log
