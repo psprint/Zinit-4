@@ -68,13 +68,23 @@
 [![MIT License][mit-badge]][mit-link] [![zinit version][ver-badge]][ver-link] [![zunit tests][tests-badge]][tests-link]
 [![Join the chat at https://gitter.im/zdharma-continuum/zinit][gitter-badge]][gitter-link]
 
-[hello][gitter-link]
+[Gitter chat][gitter-link]
 
 <p align="center">
 <a href="https://github.com/zdharma-continuum/pm-perf-test">
 <img width="550px" src="https://raw.githubusercontent.com/zdharma-continuum/zinit/images/startup-times.png"/>
 </a>
 </p>
+
+This is **`Zinit 4`** from the [original author](https://github.com/psprint). I've once removed the zinit repo from GitHub. This spawned a community-driven [zdharma-continuum](https://github.com/zdharma-continuum) org that revived all my projects (an also [z-shell](https://github.com/), which I advise to not use, as it seems to be a China, suspicious project). I've been submitting my code to @zdharma-continuum for a long time. It was a hard job as the PRs were merged slowly. Then they actually stopped to be merged, with PRs waiting there over a [**year**](https://github.com/zdharma-continuum/zinit/pull/333). So, as I have big plans for Zinit, I've started this **`Zinit 4`** fork. It's main innovations from @zdharma-continuum are:
+- AppImage distribution ([release link](https://github.com/psprint/Zinit-4/releases/tag/v4.0.1)),
+- action complete – press Alt-Shift-A and Alt-Shift-C to complete plugin names and ice modifiers,
+- themes – set `$ZITHEME` to one of `default`, `blue` and `gold` to set a color set to use for **`Zinit 4`** messages,
+- new ice `build''` which is equivalent of three other ices: `null configure make'install` and simply builds the project from sources, with support for autotools/CMake/Meson/Scons.
+
+These are the most visible changes, but there are more (like e.g.: support for compiling with libraries from previously built projects/`$ZPFX`).
+
+
 
 Zinit is a flexible and fast Zshell plugin manager that will allow you to install everything from GitHub and other
 sites. Its characteristics are:
