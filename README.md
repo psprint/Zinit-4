@@ -86,10 +86,10 @@ These are the most visible changes, but there are more (like e.g.: support for c
 
 
 
-Zinit is a flexible and fast Zshell plugin manager that will allow you to install everything from GitHub and other
+**`Zinit 4`** is a flexible and fast Zshell plugin manager that will allow you to install everything from GitHub and other
 sites. Its characteristics are:
 
-1. Zinit is currently the only plugin manager that provides Turbo mode, which yields **50-80% faster Zsh startup**
+1. **`Zinit 4`** is currently the only plugin manager that provides Turbo mode, which yields **50-80% faster Zsh startup**
    (i.e., the shell will start up to **5** times faster!). Check out a speed comparison with other popular plugin
    managers [here](https://github.com/zdharma-continuum/pm-perf-test).
 
@@ -108,21 +108,21 @@ sites. Its characteristics are:
 5. The system does not use `$FPATH`, loading multiple plugins doesn't clutter `$FPATH` with the same number of entries
    (e.g. `10`, `15` or more). Code is immune to `KSH_ARRAYS` and other options typically causing compatibility problems.
 
-6. Zinit supports special, dedicated **packages** that offload the user from providing long and complex commands. See
+6. **`Zinit 4`** supports special, dedicated **packages** that offload the user from providing long and complex commands. See
    the [zinit-packages repository](https://github.com/zdharma-continuum/zinit-packages) for a growing, complete list of
-   Zinit packages and the [Wiki page](https://zdharma-continuum.github.io/zinit/wiki/Zinit-Packages/) for an article
+   **`Zinit 4`** packages and the [Wiki page](https://zdharma-continuum.github.io/zinit/wiki/Zinit-Packages/) for an article
    about the feature.
 
-7. Also, specialized Zinit extensions — called **annexes** — have the ability to extend the plugin manager with new
+7. Also, specialized **`Zinit 4`** extensions — called **annexes** — have the ability to extend the plugin manager with new
    commands, URL-preprocessors (used by e.g.:
    [zinit-annex-readurl](https://github.com/zdharma-continuum/zinit-annex-readurl) annex), post-install and post-update
    hooks, and much more. See the [zdharma-continuum](https://github.com/zdharma-continuum) organization for a growing,
-   complete list of available Zinit extensions and refer to the
+   complete list of available **`Zinit 4`** extensions and refer to the
    [Wiki article](https://zdharma-continuum.github.io/zinit/wiki/Annexes/) for an introduction on creating your annex.
 
-## Zinit Wiki<a name="zinit-wiki"></a>
+## **`Zinit 4`** Wiki<a name="zinit-wiki"></a>
 
-The information in this README is complemented by the [Zinit Wiki](https://zdharma-continuum.github.io/zinit/wiki/). The
+The information in this README is complemented by the [**`Zinit 4`** Wiki](https://zdharma-continuum.github.io/zinit/wiki/). The
 README is an introductory overview of Zinit, while the Wiki gives complete information with examples. Make sure to read
 it to get the most out of Zinit.
 
@@ -152,16 +152,16 @@ added to Zshrc. The `--install` command should be also placed there, it installs
 
 ### Automatic<a name="automatic"></a>
 
-The easiest way to install Zinit is to execute:
+The easiest way to install **`Zinit 4`** is to execute:
 
 ```bash
 bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 ```
 
-This will install Zinit in `~/.local/share/zinit/zinit.git`. `.zshrc` will be updated with three lines of code that will
+This will install **`Zinit 4`** in `~/.local/share/zinit/zinit.git`. `.zshrc` will be updated with three lines of code that will
 be added to the bottom. The lines will be sourcing `zinit.zsh` and setting up completion for command `zinit`.
 
-After installing and reloading the shell, compile Zinit via:
+After installing and reloading the shell, compile **`Zinit 4`** via:
 
 ```zsh
 zinit self-update
@@ -259,9 +259,9 @@ zinit ice as"command" from"gh-r" \
 zinit light starship/starship
 ```
 
-### Upgrade Zinit and plugins<a name="upgrade-zinit-and-plugins"></a>
+### Upgrade **`Zinit 4`** and plugins<a name="upgrade-zinit-and-plugins"></a>
 
-Zinit can be updated to `self-update` and plugins to `update`.
+**`Zinit 4`** can be updated to `self-update` and plugins to `update`.
 
 ```zsh
 # Self update
@@ -466,7 +466,7 @@ zi ice as"completion"
 zi snippet OMZP::fd/_fd
 ```
 
-[Find more information on Oh-My-Zsh + Zinit on the Wiki](https://zdharma-continuum.github.io/zinit/wiki/Example-Oh-My-Zsh-setup/)
+[Find more information on Oh-My-Zsh + **`Zinit 4`** on the Wiki](https://zdharma-continuum.github.io/zinit/wiki/Example-Oh-My-Zsh-setup/)
 
 </details>
 
@@ -630,7 +630,7 @@ zi load <repo/plugin>
 
 ### More Examples<a name="more-examples"></a>
 
-After installing Zinit you can start adding some actions (load some plugins) to `~/.zshrc`, at bottom. Some examples:
+After installing **`Zinit 4`** you can start adding some actions (load some plugins) to `~/.zshrc`, at bottom. Some examples:
 
 ```zsh
 # Load the pure theme, with zsh-async library that's bundled with it.
@@ -653,34 +653,29 @@ zinit for \
 
 # Binary release in archive, from GitHub-releases page.
 # After automatic unpacking it provides program "fzf".
-zi ice from"gh-r" as"program"
-zi light junegunn/fzf
+zi from"gh-r" as"program" for junegunn/fzf
 
 # One other binary release, it needs renaming from `docker-compose-Linux-x86_64`.
 # This is done by ice-mod `mv'{from} -> {to}'. There are multiple packages per
 # single version, for OS X, Linux and Windows – so ice-mod `bpick' is used to
 # select Linux package – in this case this is actually not needed, Zinit will
 # grep operating system name and architecture automatically when there's no `bpick'.
-zi ice from"gh-r" as"program" mv"docker* -> docker-compose" bpick"*linux*"
-zi load docker/compose
+zi from"gh-r" \
+    as"program" \
+    mv"docker* -> docker-compose" \
+    bpick"*linux*" \
+        for docker/compose
 
 # Vim repository on GitHub – a typical source code that needs compilation – Zinit
 # can manage it for you if you like, run `./configure` and other `make`, etc.
-# Ice-mod `pick` selects a binary program to add to $PATH. You could also install the
-# package under the path $ZPFX, see: https://zdharma-continuum.github.io/zinit/wiki/Compiling-programs
-zi ice \
-  as"program" \
-  atclone"rm -f src/auto/config.cache; ./configure" \
-  atpull"%atclone" \
-  make \
-  pick"src/vim"
-zi light vim/vim
+# It'll install the package under the path $ZPFX, see:
+# https://zdharma-continuum.github.io/zinit/wiki/Compiling-programs
+zi build for vim/vim
 
 # Scripts built at install (there's single default make target, "install",
 # and it constructs scripts by `cat'ing a few files). The make'' ice could also be:
-# `make"install PREFIX=$ZPFX"`, if "install" wouldn't be the only default target.
-zi ice as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX"
-zi light tj/git-extras
+# `make"install"`, if "install" wouldn't be the only default target.
+zi make for tj/git-extras
 
 # Handle completions without loading any plugin; see "clist" command.
 # This one is to be ran just once, in interactive session.
@@ -690,27 +685,33 @@ zi creinstall %HOME/my_completions
 ```zsh
 # For GNU ls (the binaries can be gls, gdircolors, e.g. on OS X when installing the
 # coreutils package from Homebrew; you can also use https://github.com/ogham/exa)
-zi ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
-zi light trapd00r/LS_COLORS
+zi atclone"dircolors -b LS_COLORS > c.zsh" \
+    atpull'%atclone' \
+    pick"c.zsh" \
+    nocompile'!' \
+        for trapd00r/LS_COLORS
 ```
 
 [You can see an extended explanation of LS_COLORS in the Wiki.](https://zdharma-continuum.github.io/zinit/wiki/LS_COLORS-explanation/)
 
 ```zsh
 # make'!...' -> run make before atclone & atpull
-zi ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' src"zhook.zsh"
-zi light direnv/direnv
+zi as"program" make'!' \
+    atclone'./direnv hook zsh > zhook.zsh' \
+    atpull'%atclone' \
+    src"zhook.zsh" \
+        for direnv/direnv
 ```
 
 [You can see an extended explanation of direnv in the Wiki.](https://zdharma-continuum.github.io/zinit/wiki/Direnv-explanation/)
 
 If you're interested in more examples, then check out the
 [zinit-configs repository](https://github.com/zdharma-continuum/zinit-configs), where users have uploaded their
-`~/.zshrc` and Zinit configurations. Feel free to
+`~/.zshrc` and **`Zinit 4`** configurations. Feel free to
 [submit](https://github.com/zdharma-continuum/zinit-configs/issues/new?template=request-to-add-zshrc-to-the-zinit-configs-repo.md)
-your `~/.zshrc` there if it contains Zinit commands.
+your `~/.zshrc` there if it contains **`Zinit 4`** commands.
 
-You can also check out the [Gallery of Zinit Invocations](https://zdharma-continuum.github.io/zinit/wiki/GALLERY/) for
+You can also check out the [Gallery of **`Zinit 4`** Invocations](https://zdharma-continuum.github.io/zinit/wiki/GALLERY/) for
 some additional examples.
 
 Also, two articles on the Wiki present an example setup
@@ -723,7 +724,7 @@ Also, two articles on the Wiki present an example setup
 
 Following `ice` modifiers are to be [passed](https://zdharma-continuum.github.io/zinit/wiki/Alternate-Ice-Syntax/) to
 `zinit ice ...` to obtain described effects. The word `ice` means something that's added (like ice to a drink) – and in
-Zinit it means adding modifier to a next `zinit` command, and also something that's temporary because it melts – and
+**`Zinit 4`** it means adding modifier to a next `zinit` command, and also something that's temporary because it melts – and
 this means that the modification will last only for a **single** next `zinit` command.
 
 Some Ice-modifiers are highlighted and clicking on them will take you to the appropriate Wiki page for an extended
@@ -777,7 +778,7 @@ You may safely assume a given ice works with both plugins and snippets unless ex
 
 | Modifier        | Description                                                                                                                                                                         |
 | :-------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `blockf`        | Disallow plugin to modify `fpath`. Useful when a plugin wants to provide completions in traditional way. Zinit can manage completions and plugin can be blocked from exposing them. |
+| `blockf`        | Disallow plugin to modify `fpath`. Useful when a plugin wants to provide completions in traditional way. **`Zinit 4`** can manage completions and plugin can be blocked from exposing them. |
 | `completions`   | Do detect, install and manage completions for this plugin. Overwrites `as'null'` or `nocompletions`.                                                                                |
 | `nocompletions` | Don't detect, install and manage completions for this plugin. Completions can be installed later with `zinit creinstall {plugin-spec}`.                                             |
 
@@ -844,7 +845,7 @@ Following commands are passed to `zinit ...` to obtain described effects.
 | :-------- | --------------------- |
 | `help`    | Usage information.    |
 | `man`     | Manual.               |
-| `version` | Display Zinit version |
+| `version` | Display **`Zinit 4`** version |
 
 ### Loading and Unloading<a name="loading-and-unloading"></a>
 
@@ -891,7 +892,7 @@ Following commands are passed to `zinit ...` to obtain described effects.
 | `recently [time-spec]`   | Show plugins that changed recently, argument is e.g. 1 month 2 days.                                                                                     |
 | `report {plg-spec}`      | Show plugin report. `--all` – do it for all plugins.                                                                                                     |
 | `status {plg-spec}`      | Git status for plugin or svn status for snippet. `--all` – do it for all plugins and snippets.                                                           |
-| `zstatus`                | Display brief statistics for your Zinit installation.                                                                                                    |
+| `zstatus`                | Display brief statistics for your **`Zinit 4`** installation.                                                                                                    |
 | `times [-a] [-m] [-s]`   | Print load times for each plugin. `-s` – Times are printed in seconds. `-m` – Show plugin loading moments. `-a` - Times and loading moments are printed. |
 
 ### Compiling<a name="compiling"></a>
@@ -925,7 +926,7 @@ Following commands are passed to `zinit ...` to obtain described effects.
 
 ## Updating Zinit and Plugins<a name="updating-zinit-and-plugins"></a>
 
-To update Zinit issue `zinit self-update` in the command line.
+To update **`Zinit 4`** issue `zinit self-update` in the command line.
 
 To update all plugins and snippets, issue `zinit update`. If you wish to update only a single plugin/snippet instead
 issue `zinit update NAME_OF_PLUGIN`. A list of commits will be shown:
@@ -954,7 +955,7 @@ completion for a command. For example, `compdef _git git` defines that the `git`
 function.
 
 The `compdef` function is provided by `compinit` call. As it should be called later, after loading all of the plugins,
-Zinit provides its own `compdef` function that catches (i.e.: records in an array) the arguments of the call, so that
+**`Zinit 4`** provides its own `compdef` function that catches (i.e.: records in an array) the arguments of the call, so that
 the loaded plugins can freely call `compdef`. Then, the `cdreplay` (*compdef-replay*) can be used, after `compinit` will
 be called (and the original `compdef` function will become available), to execute all detected `compdef` calls. To
 summarize:
@@ -1056,7 +1057,7 @@ the slowdown and if user loads any completion-equipped plugins, i.e. almost on 1
 skip_global_compinit=1
 ```
 
-## Zinit Module<a name="zinit-module"></a>
+## **`Zinit 4`** Module<a name="zinit-module"></a>
 
 The module is now hosted [in its own repository](https://github.com/zdharma-continuum/zinit-module)
 
@@ -1064,7 +1065,7 @@ The module is now hosted [in its own repository](https://github.com/zdharma-cont
 
 ### Using ZPFX variable
 
-Zinit uses a special, short named variable `$ZPFX` to denote a standard "prefix" for installing compiled software. Such, commonly used, prefixes are usually, e.g.: `/usr/`,`/usr/local` or `$HOME/.local`. Basically, when one would want to explain what a prefix-dir is in one sentence, it would be something like: a root directory, under which `…/bin`,`…/share`, `…/lib` sub-dirs are populated with installed binaries, data-files, libraries, etc.
+**`Zinit 4`** uses a special, short named variable `$ZPFX` to denote a standard "prefix" for installing compiled software. Such, commonly used, prefixes are usually, e.g.: `/usr/`,`/usr/local` or `$HOME/.local`. Basically, when one would want to explain what a prefix-dir is in one sentence, it would be something like: a root directory, under which `…/bin`,`…/share`, `…/lib` sub-dirs are populated with installed binaries, data-files, libraries, etc.
 
 How to use the variable? It is automatically exploited when using `configure''` and `make''` ices, and user doesn't have to take any actions. This means that the `configure` command that'll be run will be:
 
@@ -1118,8 +1119,8 @@ declare -A ZINIT  # initial Zinit's hash definition, if configuring before loadi
 
 | Hash Field                          | Description                                                                                                                                                                                                                                                                                                                                                                                              |
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ZINIT\[BIN_DIR\]                    | Where Zinit code resides, e.g.: "~/.local/share/zinit/zinit.git"                                                                                                                                                                                                                                                                                                                                         |
-| ZINIT\[HOME_DIR\]                   | Where Zinit should create all working directories, e.g.: "~/.local/share/zinit"                                                                                                                                                                                                                                                                                                                          |
+| ZINIT\[BIN_DIR\]                    | Where **`Zinit 4`** code resides, e.g.: "~/.local/share/zinit/zinit.git"                                                                                                                                                                                                                                                                                                                                         |
+| ZINIT\[HOME_DIR\]                   | Where **`Zinit 4`** should create all working directories, e.g.: "~/.local/share/zinit"                                                                                                                                                                                                                                                                                                                          |
 | ZINIT\[MAN_DIR\]                    | Directory where plugins can store their manpages (`atclone"cp -vf myplugin.1 $ZINIT[MAN_DIR]/man1"`). If overridden, this directory will not necessarily be used by `man` (See #8). Default: `$ZPFX/man`                                                                                                                                                                                                 |
 | ZINIT\[PLUGINS_DIR\]                | Override single working directory – for plugins, e.g. "/opt/zsh/zinit/plugins"                                                                                                                                                                                                                                                                                                                           |
 | ZINIT\[COMPLETIONS_DIR\]            | As above, but for completion files, e.g. "/opt/zsh/zinit/root_completions"                                                                                                                                                                                                                                                                                                                               |
@@ -1127,9 +1128,9 @@ declare -A ZINIT  # initial Zinit's hash definition, if configuring before loadi
 | ZINIT\[LIST_COMMAND\]               | Command to use for displaying a directory tree (e.g., `ls --tree`, `tree`, etc.)                                                                                                                                                                                                                                                                                                                         |
 | ZINIT\[ZCOMPDUMP_PATH\]             | Path to `.zcompdump` file, with the file included (i.e. its name can be different)                                                                                                                                                                                                                                                                                                                       |
 | ZINIT\[COMPINIT_OPTS\]              | Options for `compinit` call (i.e. done by `zicompinit`), use to pass -C to speed up loading                                                                                                                                                                                                                                                                                                              |
-| ZINIT\[MUTE_WARNINGS\]              | If set to `1`, then mutes some of the Zinit warnings, specifically the `plugin already registered` warning                                                                                                                                                                                                                                                                                               |
-| ZINIT\[OPTIMIZE_OUT_DISK_ACCESSES\] | If set to `1`, then Zinit will skip checking if a Turbo-loaded object exists on the disk. By default Zinit skips Turbo for non-existing objects (plugins or snippets) to install them before the first prompt – without any delays, during the normal processing of `zshrc`. This option can give a performance gain of about 10 ms out of 150 ms (i.e.: Zsh will start up in 140 ms instead of 150 ms). |
-| ZINIT\[NO_ALIASES\]                 | If set to `1`, then Zinit will not set aliases such as `zi` or `zini`                                                                                                                                                                                                                                                                                                                                    |
+| ZINIT\[MUTE_WARNINGS\]              | If set to `1`, then mutes some of the **`Zinit 4`** warnings, specifically the `plugin already registered` warning                                                                                                                                                                                                                                                                                               |
+| ZINIT\[OPTIMIZE_OUT_DISK_ACCESSES\] | If set to `1`, then **`Zinit 4`** will skip checking if a Turbo-loaded object exists on the disk. By default **`Zinit 4`** skips Turbo for non-existing objects (plugins or snippets) to install them before the first prompt – without any delays, during the normal processing of `zshrc`. This option can give a performance gain of about 10 ms out of 150 ms (i.e.: Zsh will start up in 140 ms instead of 150 ms). |
+| ZINIT\[NO_ALIASES\]                 | If set to `1`, then **`Zinit 4`** will not set aliases such as `zi` or `zini`                                                                                                                                                                                                                                                                                                                                    |
 
 There is also `$ZPFX`, set by default to `~/.local/share/zinit/polaris` – a directory where software with `Makefile`,
 etc. can be pointed to, by e.g. `atclone'./configure --prefix=$ZPFX'`.
@@ -1140,11 +1141,11 @@ Use `create` subcommand with user name `_local` (the default) to create plugin's
 will be not connected with GitHub repository (because of user name being `_local`). To enter the plugin's directory use
 `cd` command with just plugin's name (without `_local`, it's optional).
 
-If user name will not be `_local`, then Zinit will create repository also on GitHub and setup correct repository origin.
+If user name will not be `_local`, then **`Zinit 4`** will create repository also on GitHub and setup correct repository origin.
 
 ### Extending Git<a name="extending-git"></a>
 
-There are several projects that provide git extensions. Installing them with Zinit has many benefits:
+There are several projects that provide git extensions. Installing them with **`Zinit 4`** has many benefits:
 
 - all files are under `$HOME` – no administrator rights needed,
 - declarative setup (like Chef or Puppet) – copying `.zshrc` to different account brings also git-related setup,
@@ -1206,7 +1207,7 @@ done
 Link to the [CHANGELOG](doc/CHANGELOG.md).
 ## Completion for Plugin IDs and Ices
 
-Zinit supports a custom completion for plugin IDs (`Alt-Shift-A`) and
+**`Zinit 4`** supports a custom completion for plugin IDs (`Alt-Shift-A`) and
 for ices (`Alt-Shift-C`). Just place the cursor after e.g.: `wa` and
 press `Alt-Shift-C` to have it completed to `wait`. The same with
 plugin IDs – `fzf` then `Alt-Shift-A` to have `junegunn/fzf` (if it's
@@ -1214,13 +1215,13 @@ installed).
 
 ## Support<a name="support"></a>
 
-Zinit is a personal, free-time project with no funding and a huge
+**`Zinit 4`** is a personal, free-time project with no funding and a huge
 [feature request backlog](https://github.com/zdharma-continuum/zinit/issues). If you love it, consider supporting its
 development via GitHub Sponsors \[pending\]. Any help counts!
 
 ## Getting Help and Community<a name="getting-help-and-community"></a>
 
-Do you need help or wish to get in touch with other Zinit users?
+Do you need help or wish to get in touch with other **`Zinit 4`** users?
 
 - [Open a discussion](https://github.com/zdharma-continuum/zinit/discussions).
 
