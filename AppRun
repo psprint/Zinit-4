@@ -67,3 +67,19 @@ fi
 if ((Opts[-r]));then
     z4::run $VERF:h $NVER
 fi
+
+if ((Opts[-u]));then
+    if [[ ! -e $VERF:h ]];then
+        +m {I}{lhi}Zinit 4{i} is not installed!
+    elif z4::uninstall $VERF:h;then
+        +m {S}uninstall complete!
+    else
+        +m {E}problems during uninstall
+    fi
+fi
+
+if ((Opts[-h]));then
+    z4::usage $NVER
+fi
+
+return 0

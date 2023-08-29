@@ -140,7 +140,7 @@ zstatus"
 : ${ZINIT[SERVICES_DIR]:=${ZINIT[HOME_DIR]}/services}
 : ${ZINIT[SNIPPETS_DIR]:=${ZINIT[HOME_DIR]}/snippets}
 typeset -g ZPFX
-: ${ZPFX:=${ZINIT[HOME_DIR]}/polaris}
+: ${ZPFX:=$HOME/.z4}
 : ${ZINIT[ALIASES_OPT]::=${${options[aliases]:#off}:+1}}
 : ${ZINIT[MAN_DIR]:=${ZPFX}/man}
 : ${ZINIT[THEME_DIR]:=$ZINIT[BIN_DIR]/share/themes}
@@ -3191,7 +3191,8 @@ zpcompdef() {
 
 # code [[[
 if [[ -z $ZINIT[NO_ALIASES] ]]; then
-    builtin alias zi=zinit z4=zinit
+    builtin alias zi=zinit
+    builtin alias z4=zinit zinit4=zinit
 fi
 
 (( ZINIT[ALIASES_OPT] )) && builtin setopt aliases

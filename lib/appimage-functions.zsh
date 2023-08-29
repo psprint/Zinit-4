@@ -35,7 +35,8 @@ z4::parse-opts()
     builtin set -- "$args[@]"
     {
         inopts=(-r --run -f --force -v --verbose
-                -i --install -e --eval
+                -i --install -e --eval -u --uninstall
+                -h --help
         )
         builtin zparseopts -D -E -A $AAVAR -a $AVAR -F -- \
                 ${inopts[@]#-}||throw IncorrectOpts
@@ -62,6 +63,14 @@ z4::parse-opts()
     local -a args=("${@//$HOME/~}")
     builtin print -r -u2 -P -- "${args[@]//(#b)\{([^\}]##)\}/\
 $ZINIT[col-$match[1]]}$ZINIT[col-rst]"
+}
+
+z4::uninstall(){
+    local NDIR=$1
+    [[ $NDIR == [[:space:]/]# ]]&&NDIR=/tmp/abc123
+    command rm -rf $NDIR:h/zinit.old||return 1
+    command mv -- $NDIR $NDIR:h/zinit.old||return 1
+    return 0
 }
 
 ##
@@ -159,4 +168,26 @@ fi
 builtin source ${(qqq)NFILE}
 END
 
+}
+
+
+z4::usage(){
+    local NVER=$1
+    +m {I}Usage: {cmd}z4-$NVER.AppImage {opt}-i{i}/{opt}--install{i} \
+        {opt}-u{i}/{opt}--uninstall{i} {opt}-e{i}/{opt}--eval{i}{nl}${(l:30:)} \
+        {opt}-r{i}/{opt}--run{i} {opt}-v{i}/{opt}--verbose{i}
+    +m {I}Options:{nl} \
+       \ {opt}-i{i}/{opt}--install{i}${(l:3:)}– create zinit installation at: \
+                {file}~/.local/share/zinit/zinit.bin{i}{nl} \
+       \ {opt}-u{i}/{opt}--uninstall{i}${(l:1:)}– remove the \
+                                                {file}…/zinit.bin{i} dir{nl} \
+       \ {opt}-e{i}/{opt}--eval{i}${(l:6:)}– output the startup/zinit-load \
+                                snippet to standard output,{nl} \
+       \ {opt}-r{i}/{opt}--run{i}${(l:7:)}– run a new Zsh process with Zinit 4 \
+                                loaded from this image,{nl} \
+       \ {opt}-v{i}/{opt}--verbose{i}${(l:3:)}– be more verbose in messages.
+    +m {nl}{I}Typically, one adds the following line to: {file}~/.zshrc{i}:{nl} \
+            $'\t'{b}{func}eval \"\$\({file}$PWD/z4-$NVER.AppImage\
+                         {rst}{b}{opt}-ie{func}\)\"{nl}{i}\
+    \ to have {b-lhi}Zinit 4{i} automatically installed and loaded.
 }
