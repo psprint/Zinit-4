@@ -6,7 +6,7 @@ zinit-install.zsh - a shell script
 Documentation automatically generated with `zshelldoc'
 
 == FUNCTIONS
- .zi::get-architecture
+ .zi÷get-architecture
  .zinit-at-eval
  .zinit-compile-plugin
  .zinit-compinit
@@ -57,11 +57,11 @@ Has 6 line(s). No functions are called (may set up e.g. a hook, a Zle widget bou
 
 Uses feature(s): _source_
 
-==== .zi::get-architecture
+==== .zi÷get-architecture
 
 Has 43 line(s). Calls functions:
 
- .zi::get-architecture
+ .zi÷get-architecture
  `-- zinit.zsh/+zi-log
 
 Uses feature(s): _setopt_

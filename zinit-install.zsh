@@ -1476,8 +1476,8 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
 
     print
 } # ]]]
-# FUNCTION: .zi::get-architecture [[[
-.zi::get-architecture () {
+# FUNCTION: .zi÷get-architecture [[[
+.zi÷get-architecture () {
   emulate -LR zsh
   setopt extendedglob noshortloops nowarncreateglobal rcquotes typesetsilent
   local _clib="gnu" _cpu="$(uname -m)" _os="$(uname -s)" _sys=""
@@ -1531,7 +1531,7 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
   REPLY=
   local plugin="$2" urlpart="$3" user="$1"
   local -a bpicks filtered init_list list parts
-  parts=(${(@s:;:)$(.zi::get-architecture)})
+  parts=(${(@s:;:)$(.zi÷get-architecture)})
   # +zi-log "{info}[{pre}gh-r{info}]{rst} filters -> {glob}${(@)parts}{rst}"
   if [[ -z $urlpart ]]; then
     local tag_version=${ICE[ver]}

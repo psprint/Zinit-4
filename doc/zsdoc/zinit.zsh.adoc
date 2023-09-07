@@ -199,7 +199,7 @@ Has 244 line(s). Calls functions:
  |   |-- zinit-autoload.zsh/.zinit-unload
  |   |-- zinit-autoload.zsh/.zinit-update-or-status
  |   |-- zinit-autoload.zsh/.zinit-update-or-status-all
- |   |-- zinit-autoload.zsh/zi::version
+ |   |-- zinit-autoload.zsh/zi÷version
  |   |-- zinit-install.zsh/.zinit-compile-plugin
  |   |-- zinit-install.zsh/.zinit-compinit
  |   |-- zinit-install.zsh/.zinit-forget-completion
@@ -254,8 +254,8 @@ Called by:
  zinit-autoload.zsh/.zinit-update-or-status-all
  zinit-autoload.zsh/.zinit-update-or-status
  zinit-autoload.zsh/.zinit-wait-for-update-jobs
- zinit-autoload.zsh/zi::version
- zinit-install.zsh/.zi::get-architecture
+ zinit-autoload.zsh/zi÷version
+ zinit-install.zsh/.zi÷get-architecture
  zinit-install.zsh/.zinit-compile-plugin
  zinit-install.zsh/.zinit-compinit
  zinit-install.zsh/.zinit-download-file-stdout
@@ -1706,7 +1706,7 @@ Has 553 line(s). Calls functions:
  |-- zinit-autoload.zsh/.zinit-unload
  |-- zinit-autoload.zsh/.zinit-update-or-status
  |-- zinit-autoload.zsh/.zinit-update-or-status-all
- |-- zinit-autoload.zsh/zi::version
+ |-- zinit-autoload.zsh/zi÷version
  |-- zinit-install.zsh/.zinit-compile-plugin
  |-- zinit-install.zsh/.zinit-compinit
  |-- zinit-install.zsh/.zinit-forget-completion
@@ -1864,7 +1864,7 @@ Has 1 line(s). Calls functions:
      |-- zinit-autoload.zsh/.zinit-unload
      |-- zinit-autoload.zsh/.zinit-update-or-status
      |-- zinit-autoload.zsh/.zinit-update-or-status-all
-     |-- zinit-autoload.zsh/zi::version
+     |-- zinit-autoload.zsh/zi÷version
      |-- zinit-install.zsh/.zinit-compile-plugin
      |-- zinit-install.zsh/.zinit-compinit
      |-- zinit-install.zsh/.zinit-forget-completion

@@ -5,7 +5,7 @@
 # Copyright (c) 2022 zdharma-continuum and contributors
 # Copyright (c) 2016-2022 Sebastian Gniazdowski and contributors.
 
-zi-action-complete()
+zi÷action-complete()
 {
     # Emulate zsh and useful options
     emulate -L zsh -o extended_glob -o warn_create_global -o typeset_silent \
@@ -28,7 +28,7 @@ zi-action-complete()
     # Invoke the helper/worker function that does all needed $BUFFER processing
     #
 
-    zi-process-buffer || return 1
+    zi÷process-buffer || return 1
 
     integer i j pos=$CURSOR size=${#ZINIT_PB_WORDS} newcursor
     local w PWIDGET buf
@@ -46,7 +46,7 @@ zi-action-complete()
     [[ $BUFFER[CURSOR] == [[:space:]] ]] || \
         w=$ZINIT_PB_WORDS[ZINIT_PB_SELECTED_WORD]
 
-    if [[ $WIDGET == zi-action-complete-ice && $WIDGET != $PWIDGET && \
+    if [[ $WIDGET == zi÷action-complete-ice && $WIDGET != $PWIDGET && \
         ( $ziac_prevw != $w || -z $w ) ]]
     then
         local -a ice_order=(
@@ -62,7 +62,7 @@ zi-action-complete()
     elif (( ziac_midx )) && [[ $WIDGET == *-ice && $WIDGET == $PWIDGET ]]; then
       ziac_midx+=1
     fi
-    if [[ $WIDGET == zi-action-complete && $WIDGET != $PWIDGET && \
+    if [[ $WIDGET == zi÷action-complete && $WIDGET != $PWIDGET && \
         ( $ziac_prevw != $w || -z $w ) ]]; then
         ziac_matches=( $ZINIT[PLUGINS_DIR]/*${w//\//---}*(-onND[1,18]) )
         ziac_prevw=$w

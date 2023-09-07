@@ -3433,11 +3433,11 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
     }
 } # ]]]
 
-# FUNCTION: zi::version [[[
+# FUNCTION: zi÷version [[[
 # Shows usage information.
 #
 # User-action entry point.
-zi::version() {
+zi÷version() {
 	+zi-log "zinit{cmd} $(git --git-dir=$(realpath ${ZINIT[BIN_DIR]}/.git) describe --tags) {rst}(${OSTYPE}_${CPUTYPE})"
 	return $?
 } # ]]]

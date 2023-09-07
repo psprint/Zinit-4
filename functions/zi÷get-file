@@ -1,0 +1,50 @@
+#!/usr/bin/env zsh
+
+zi÷get-file() {
+    0=${${ZERO:-${(%):-%x}}:A}
+
+    local -a opts; local -A Opts
+    zi÷parse-opts "p -progress q -quiet" Opts opts "$@"||return 7
+    set -- "$reply[@]"
+    : ${Opts[-C]:=$PWD}
+    zi÷opt-cascade Opts -p --progress -q --quiet
+    zi÷reset
+    integer retval
+
+    # Verify input
+    local url=$1 out=${2:-$1:t}
+    if [[ $url == WRONGSTR || $out == WRONGSTR ]];then
+        iqerr no or incorrect url given, cannot download…
+        return 13
+    fi
+
+    # Copy file directly for file:// urls, wget doesn't support this
+    if [[ $url =~ ^file:// ]];then
+        local filepath=${url##file://}
+        [[ $url:A = $filepath:A ]]&&{iqwarn src and dst path the same;return 1;}
+        <$filepath >!$filepath:t
+        return $?
+    fi
+
+    # Extend path if not containing /usr/local/bin…
+    if (( !${path[(I)/usr/local/bin]} ));then
+            path[1,0]=( /usr/local/bin );
+            trap "path[1]=()" EXIT
+            trap "return 7" INT TERM QUIT
+            builtin rehash
+    fi
+
+    local -a qcmd
+    # Attempt to download the file…
+    if type curl IQIO; then
+        qcmd=(command curl -- ${Opts[-q]:+--silent} -fSL $url -o $out)
+        [[ -n $Opts[-p] ]]&&qcmd+=(--progress-bar)
+        zi÷run-command -C $Opts[-C] "$qcmd[@]" 2>>(zi÷single-line >&2)
+    elif type wget IQIO; then
+        qcmd=(command wget -- ${Opts[-p]:--q} ${Opts[-q]:+--quiet} 
+                        $url -O ${out:--})
+        zi÷run-command -C $Opts[-C] "$qcmd[@]"
+    fi
+    return $?
+}
+# vim:ft=zsh

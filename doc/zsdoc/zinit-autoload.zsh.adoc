@@ -70,7 +70,7 @@ Documentation automatically generated with `zshelldoc'
  .zinit-update-or-status-all
  .zinit-update-or-status-snippet
  .zinit-wait-for-update-jobs
- zi::version
+ zi÷version
 
 === DETAILS
 
@@ -1598,7 +1598,7 @@ Called by:
 
  .zinit-update-all-parallel
 
-==== zi::version
+==== zi÷version
 
 ____
  
@@ -1610,7 +1610,7 @@ ____
 
 Has 2 line(s). Calls functions:
 
- zi::version
+ zi÷version
  `-- zinit.zsh/+zi-log
 
 Called by:

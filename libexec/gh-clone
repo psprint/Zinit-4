@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+# -*- mode: sh; sh-indentation: 4; indent-tabs-mode: nil; sh-basic-offset: 4;-*-
+# Copyright (c) 2023 Sebastian Gniazdowski
+#
+libexec/gh-clone() {
+    0=${${ZERO:-${(%):-%x}}:A}
+    source $0:h:h/share/preamble.inc.zsh --fun
+
+    local -a opts; local -A Opts
+    zi÷parse-opts "C: -dir:" Opts opts "$@"||return 7
+    set -- "$reply[@]"
+    zi÷opt-cascade Opts -C --dir
+    zi÷reset
+
+    libexec/clone $opts http://github.com/"$1" $2
+    return $?
+}
+# vim:ft=zsh:sw=4:sts=4:et

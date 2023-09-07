@@ -29,7 +29,7 @@
 * assign to functions hash to make %x work ([bd65a01](https://github.com/zdharma-continuum/zinit/commit/bd65a017345ac891b6b14eb5feb4182bc9c74ace))
 * broken symbolic link after `creinstall .` ([da0d6b7](https://github.com/zdharma-continuum/zinit/commit/da0d6b712c6466d11165ac9e27a6cd7de856e537))
 * bump node version in release workflow ([938f483](https://github.com/zdharma-continuum/zinit/commit/938f48375b20545078b63d6c1dba0a905599afe4))
-* change prefix `~zi::` to `__zi::` ([0e45493](https://github.com/zdharma-continuum/zinit/commit/0e45493e36ff350c79c164895bd4718103e2cf7a))
+* change prefix `~zi≤` to `__zi≤` ([0e45493](https://github.com/zdharma-continuum/zinit/commit/0e45493e36ff350c79c164895bd4718103e2cf7a))
 * container build & shell make targets ([a72fb83](https://github.com/zdharma-continuum/zinit/commit/a72fb83f0999a7fa4a26c6e1bb71d6cab3858b4f))
 * container build & shell make targets ([14b2cda](https://github.com/zdharma-continuum/zinit/commit/14b2cda0397c343b1bfdc041cba7c4ab216e3803))
 * container build & shell make targets ([370808d](https://github.com/zdharma-continuum/zinit/commit/370808dd5186f4b9c8a214e7ef6f4350df243b5b))
