@@ -8,7 +8,6 @@
 libexec/hop() {
     0=${${ZERO:-${(%):-%x}}:A}
     source $0:h:h/share/preamble.inc.zsh
-    print q
 
     local -A Opts; local -a opts qopts
     zi÷parse-opts "t: -timeout: i=qopts -zle-nt=qopts \
@@ -32,7 +31,6 @@ libexec/hop() {
     fi
 
     local t="@sleep:$Opts[-t]"
-    print q
     zi÷exec-hop-back $t $qopts -- "$@"
     EC+=$?
     return EC

@@ -15,8 +15,7 @@
 # zi÷exec-hop-back  @sleep:5.5 "BUFFER='The time has passed, sorry for replacing your command line ;)'"
 
 zi÷exec-hop-back() {
-    eval "${SNIP_EMULATE_OPTIONS_ZERO:-false}"||\
-        0=${${${(M)${0::=${(%):-%x}}:#/*}:-$PWD/$0}:A}
+    0=${${ZERO:-${(%):-%x}}:A}
 
     local QMESSAGE_SCRIPT="(){emulate -L zsh -o promptsubst;\
 POSTDISPLAY=$'\n'%TXT%;zle -R;\
@@ -70,7 +69,7 @@ IFS= read -s -r -k1 </dev/tty;\
     (($+Opts[--msg]))&&set -- "${QMESSAGE_SCRIPT/\%TXT\%/${(qqq):-"$*"}}"
 
     # Create widgets
-    builtin zle -D zi÷exec-widget IQIO
+    builtin zle -D zi÷exec-widget 2>/dev/null
     builtin zle -N zi÷exec-widget zi÷exec-hop-back||\
             iqwarn couldn\'t set up the recurring code snippet to run\
                 (zle error: {int}$?{txt})
