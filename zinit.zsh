@@ -29,11 +29,14 @@ unset ZPLGM
 [[ ! -e ${ZINIT[BIN_DIR]}/zinit.zsh ]] && ZINIT[BIN_DIR]=
 
 # Respect the plugin standard too.
-ZINIT[ZERO]="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
-[[ ! -o functionargzero || ${options[posixargzero]} = on || ${ZINIT[ZERO]} != */* ]] && ZINIT[ZERO]="${(%):-%N}"
+ZINIT[ZERO]="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%x}}}"
+[[ ! -o functionargzero || ${options[posixargzero]} = on || ${ZINIT[ZERO]} != */* ]] && ZINIT[ZERO]="${(%):-%x}"
 
 : ${ZINIT[BIN_DIR]:="${ZINIT[ZERO]:h}"}
 [[ ${ZINIT[BIN_DIR]} = \~* ]] && ZINIT[BIN_DIR]=${~ZINIT[BIN_DIR]}
+
+typeset -A -g Plugins
+Plugins[ANGEL_ZINIT4_DIR]="$ZINIT[BIN_DIR]"
 
 # Make ZINIT[BIN_DIR] path absolute.
 ZINIT[BIN_DIR]="${${(M)ZINIT[BIN_DIR]:#/*}:-$PWD/${ZINIT[BIN_DIR]}}"
@@ -129,7 +132,13 @@ self-update|snippet|snippets|srv|status|stress|\
 times|\
 uncompile|unload|update|\
 version|\
-zstatus"
+zstatus|\
+xhop|\
+xclone|\
+xgh-clone|\
+xfetch|\
+x-tract|\
+xconsole"
 
 # Can be customized.
 : ${ZINIT[COMPLETIONS_DIR]:=${ZINIT[HOME_DIR]}/completions}
@@ -3107,14 +3116,19 @@ You can try to prepend {apo}${___q}{lhi}@{apo}'{error} to the ID if the last ice
                     .zinit-module "${@[2-correct,-1]}"; ___retval=$?
                     ;;
                  (*)
-                    if [[ -z $1 ]] {
+                    if [[ $(type -w libexec/${1#x}) != \
+                        *:\ none ]]
+                    then
+                        libexec/${1#x} "$@[2,-1]"
+                        retval=$?
+                    elif [[ -z $1 ]] ;then
                        +zi-log -n "{b}{u-warn}ERROR{b-warn}:{rst} Missing a {cmd}subcommand "
                        +zinit-prehelp-usage-message rst
-                    } else {
+                    else
                        +zi-log -n "{b}{u-warn}ERROR{b-warn}:{rst} Unknown subcommand{ehi}:{rst}" \
                                "{apo}\`{error}$1{apo}\`{rst} "
                        +zinit-prehelp-usage-message rst
-                    }
+                    fi
                     ___retval=1
                     ;;
              esac
