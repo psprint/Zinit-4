@@ -2071,7 +2071,7 @@ zimv() {
             (
                 cd -q $dir
                 chmod +x ./autogen.sh
-                ./autogen.sh
+                command ./autogen.sh
             )
     # Autoreconf only if available in PATH
     elif [[ -f $dir/configure && -f $dir/configure.ac && \
@@ -2081,10 +2081,12 @@ zimv() {
         .zinit-countdown autoreconf\ -f\ -i\ … && \
             (
                 cd -q $dir
-                rm -f aclocal.m4
-                aclocal -I m4 --force
+                #rm -f aclocal.m4
+                [[ -d md ]]&&local -a m4opt=(-I m4)
+                aclocal $m4opt --force
                 libtoolize --copy --force
-                autoreconf -f -i -I m4
+                aclocal $m4opt --force
+                autoreconf -f -i $m4opt
             )
     # Manual reproduction of autoreconf run
     elif [[ -f $dir/configure && -f $dir/configure.ac ]]; then
@@ -2094,22 +2096,25 @@ ${${${(M)flags:#*\#*}:+$msg}:-$msg_}
         .zinit-countdown aclocal,\ autoconf,\ automake && \
             (
                 cd -q $dir
-                rm -f aclocal.m4
-                aclocal -I m4 --force
+                [[ -d md ]]&&local -a m4opt=(-I m4)
+                aclocal $m4opt --force
                 libtoolize --copy --force
-                aclocal -I m4 --force
-                autoconf -I m4 -f
-                autoheader -I m4 -f
+                aclocal $m4opt --force
+                autoconf $m4opt -f
+                autoheader $m4opt -f
                 automake --add-missing -c --force-missing
             )
     # Only autoconf if no existing ./configure
     elif [[ ! -f $dir/configure && -f $dir/configure.ac ]]; then
         q=1
-        m {pre}Running {cmd}autoconf {opt}-f${${${(M)flags:#*\#*}:+$msg}:-$msg_}
-        .zinit-countdown autoconf\ -f && \
+        m {pre}Running {cmd}autoreconf {opt}-f${${${(M)flags:#*\#*}:+$msg}:-$msg_}
+        .zinit-countdown autoreconf\ -f && \
             (
                 cd -q $dir
-                autoconf -f -I m4
+                [[ -d md ]]&&local -a m4opt=(-I m4)
+                aclocal $m4opt --force
+                libtoolize --copy --force
+                autoreconf -f -i $m4opt
             )
     elif [[ $flags == *\#* ]]; then
         m {ehi}WARNING:{error}: No {cmd}autogen.sh{error} nor {file}configure.ac \
