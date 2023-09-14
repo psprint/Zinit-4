@@ -3329,16 +3329,16 @@ typeset -gi MEND MBEGIN
                     \$OP -- ${(qqq)ZINIT_TMP}
                     ;;
                 (load)
-                    if [[ -f ${(qqq)ZINIT_TMP%/}/._zinit/url ]];then
+                    if [[ -f ${(qqq)ZINIT_TMP%/}/._zinit/mode ]];then
                         local IDAS=\$(<${(qqq)ZINIT_TMP%/}/._zinit/url)
                     else
-                        local IDAS=${(qqq)iIDAS}
+                        local IDAS=${(qqq)IDAS}
                     fi
+                    local -A ICE
                     .zinit-load-ices \$IDAS
-                    foreach ICE ICEV (\"\$\{(@kv)ICES\}\")
+                    foreach ICE ICEV (\"\${(@kv)ICE}\")
                         icest+=(\$ICE\$ICEV)
                     end
-                    print -- zinit \"\$icest[@]\" for \$IDAS
                     
                     zinit \"\$icest[@]\" for \$IDAS
                     ;;
