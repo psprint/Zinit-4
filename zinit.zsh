@@ -3316,6 +3316,51 @@ if [[ -e ${${ZINIT[BIN_DIR]}}/zmodules/Src/zdharma/zplugin.so ]] {
 typeset -g REPLY MATCH reply=() match=() mbegin=() mend=()
 typeset -gi MEND MBEGIN
 
+(){
+    emulate -L zsh -o extendedglob
+    foreach ZINIT_TMP ($ZINIT[PLUGINS_DIR]/*[[:alnum:]](N.,/,@)
+                     $ZINIT[SNIPPETS_DIR]/*[[:alnum:]](N.,/,@))
+        local PID=${${ZINIT_TMP:t}##*---} \
+            IDAS=${${ZINIT_TMP:t}//---//}
+        functions[::$PID]="
+            local OP=\$1 pos=(\"\$@[2,-1]\") ICE ICEV icest=()
+            case \$OP in
+                (cd|cdr)
+                    \$OP -- ${(qqq)ZINIT_TMP}
+                    ;;
+                (load)
+                    if [[ -f ${(qqq)ZINIT_TMP%/}/._zinit/url ]];then
+                        local IDAS=\$(<${(qqq)ZINIT_TMP%/}/._zinit/url)
+                    else
+                        local IDAS=${(qqq)iIDAS}
+                    fi
+                    .zinit-load-ices \$IDAS
+                    foreach ICE ICEV (\"\$\{(@kv)ICES\}\")
+                        icest+=(\$ICE\$ICEV)
+                    end
+                    print -- zinit \"\$icest[@]\" for \$IDAS
+                    
+                    zinit \"\$icest[@]\" for \$IDAS
+                    ;;
+                (unload)
+                    zinit unload ${(qqq)IDAS} \"\$pos[@]\"
+                    ;;
+                (update|status)
+                    zinit \$OP ${(qqq)IDAS} \"\$pos[@]\"
+                    ;;
+                (run|*)
+                    [[ \$OP == run ]]&&OP=
+                    (
+                        builtin cd -q -- ${(qqq)ZINIT_TMP}
+                        builtin eval \$OP \"\$pos[@]\"
+                    )
+                    ;;
+            esac
+        "
+    end
+
+}
+
 alias -g '[[:WRONGSTR:]]'='([[:cntrl:][:space:][:INCOMPLETE:][:INVALID:]]#|*[[:INCOMPLETE:][:INVALID:]]*|[[:cntrl:]]#|[^[:print:][:alnum:]]#)'
 
 alias -g '[[:iNVALIDST:]]'='*[[:INCOMPLETE:][:INVALID:]]*'
@@ -3331,7 +3376,20 @@ zinit null light-mode autoload'z4_directory_name_generic' \
 
 z4_zdn_widget(){z4_directory_name_generic "$@";}
 add-zsh-hook -U zsh_directory_name z4_zdn_widget
+z4_dir_suffix() {
+    [[ $1 = 1 ]] || return
 
+    if [[ $LBUFFER[-1] != ']' ]]; then
+        if [[ $KEYS = [$'] \t\n/']## ]]; then
+            if [[ $LBUFFER[-1] == ':' ]];then
+                LBUFFER="$LBUFFER[1,-2]"
+            fi
+            LBUFFER+=${${${KEYS:#*\]*}:+\]}:-${kEYS//\]/}}
+        elif [[ $KEYS = (*[^[:print:]]*|[[:blank:]\;\&\|@]) ]]; then
+            LBUFFER="$LBUFFER[1,-2]"\]
+        fi
+    fi
+}
 (){
 
 setopt localoptions extendedglob
