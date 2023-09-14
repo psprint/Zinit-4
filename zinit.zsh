@@ -157,7 +157,7 @@ typeset -g ZPFX
 
 ZINIT[PLUGINS_DIR]=${~ZINIT[PLUGINS_DIR]}   ZINIT[COMPLETIONS_DIR]=${~ZINIT[COMPLETIONS_DIR]}
 ZINIT[SNIPPETS_DIR]=${~ZINIT[SNIPPETS_DIR]} ZINIT[SERVICES_DIR]=${~ZINIT[SERVICES_DIR]}
-export ZPFX=${~ZPFX} ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zinit}" \
+export ZPFX=${~ZPFX} ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/z4}" \
     PMSPEC=0uUpiPsf
 [[ -z ${path[(re)$ZPFX/bin]} ]] && [[ -d "$ZPFX/bin" ]] && path=( "$ZPFX/bin" "${path[@]}" )
 [[ -z ${path[(re)$ZPFX/sbin]} ]] && [[ -d "$ZPFX/sbin" ]] && path=( "$ZPFX/sbin" "${path[@]}" )
@@ -3217,7 +3217,7 @@ fi
 
 (( ZINIT[SOURCED] ++ )) && return 0
 
-autoload add-zsh-hook
+builtin autoload -Uz add-zsh-hook
 if { zmodload zsh/datetime } {
     add-zsh-hook -- precmd @zinit-scheduler  # zsh/datetime required for wait/load/unload ice-mods
     ZINIT[HAVE_SCHEDULER]=1
@@ -3313,7 +3313,84 @@ if [[ -e ${${ZINIT[BIN_DIR]}}/zmodules/Src/zdharma/zplugin.so ]] {
 @zinit-register-hook "compile-plugin" hook:atclone-post ∞zinit-compile-plugin-hook
 
 # create so that for sure no warncreateglobal warning is issued
-typeset -g REPLY
+typeset -g REPLY MATCH reply=() match=() mbegin=() mend=()
+typeset -gi MEND MBEGIN
+
+#
+# set up named directories ~[plug-name], and others
+#
+
+zinit null light-mode autoload'z4_directory_name_generic' \
+    for %$ZINIT[BIN_DIR]
+
+z4_zdn_widget(){z4_directory_name_generic "$@";}
+add-zsh-hook -U zsh_directory_name z4_zdn_widget
+
+(){
+setopt localoptions extendedglob
+typeset -Ag z4_zdn_top z4_zdn_level1 z4_gitdir_zdn_level1 \
+        z4_zdn_zplug_level1=(:default: z4_zdn_level1) \
+        z4_zdn_zsnip_level1=(:default: z4_zdn_level1)
+zstyle ":zdn:z4_zdn_widget:" mapping z4_zdn_top
+z4_zdn_top+=(
+    # Zinit4's system diectories
+    z           $ZINIT[BIN_DIR]/:z4_gitdir_zdn_level1
+    z4          $ZINIT[BIN_DIR]/:z4_gitdir_zdn_level1
+    zbin        $ZINIT[BIN_DIR]/:z4_gitdir_zdn_level1
+    z4bin       $ZINIT[BIN_DIR]/:z4_gitdir_zdn_level1
+    zcompl      $ZINIT[COMPLETIONS_DIR]
+    z4compl     $ZINIT[COMPLETIONS_DIR]
+    zsnip       $ZINIT[SNIPPETS_DIR]/:z4_zdn_zsnip_level1
+    z4snip      $ZINIT[SNIPPETS_DIR]/:z4_zdn_zsnip_level1
+    zplug       $ZINIT[PLUGINS_DIR]/:z4_zdn_zplug_level1
+    z4plug      $ZINIT[PLUGINS_DIR]/:z4_zdn_zplug_level1
+    ztheme      $ZINIT[THEME_DIR]
+    z4theme     $ZINIT[THEME_DIR]
+
+    # Z-Prefix's words
+    zp          $ZPFX
+    ZP          $ZPFX
+    zpfx        $ZPFX
+    ZPFX        $ZPFX
+
+
+    # Default
+    :default:   /:z4_zdn_level1
+)
+
+# ~[plug-name] for installed plugin
+ZINIT_TMP=($ZINIT[SNIPPETS_DIR]/*[[:alnum:]](N.,/,@))
+: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_top[${${match[1]:t}##*---}]::=$match[1]}}
+: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_zsnip_level1[${${match[1]:t}##*---}]::=${match[1]:t}}}
+
+ZINIT_TMP=($ZINIT[PLUGINS_DIR]/*[[:alnum:]](N.,/,@))
+: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_top[${${match[1]:t}##*---}]::=$match[1]}}
+: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_zplug_level1[${${match[1]:t}##*---}]::=${match[1]:t}}}
+
+
+z4_zdn_level1+=(
+    share       share
+    lib         lib
+    libexec     libexec
+    bin         bin
+    func        functions
+    scripts     scripts
+    docs        docs
+    src         src
+    contrib     contrib
+)
+
+z4_gitdir_zdn_level1+=(
+    share       share
+    lib         lib
+    libexec     libexec
+    func        functions
+    scripts     scripts
+    doc         doc
+)
+
+}
+
 ZINIT_TMP=$0:h
 zinit null light-mode autoload"$(IFS=';';q=($ZINIT_TMP/libexec/*[a-zA-Z0-9_]);print -rl -- "${${q[@]:t2}[*]}"\;;q=($ZINIT_TMP/functions/*[a-zA-Z0-9_]);print -rl -- "${${q[@]:t}[*]}")" \
     for %$ZINIT[BIN_DIR]
@@ -3321,7 +3398,8 @@ zinit null light-mode autoload"$(IFS=';';q=($ZINIT_TMP/libexec/*[a-zA-Z0-9_]);pr
 zinit null light-mode autoload'zi÷browse-symbol;zi÷action-complete;zi÷process-buffer' \
     for %$ZINIT[BIN_DIR]
 
-ZINIT_REGISTERED_PLUGINS[-2,-1]=()
+# Clean plugin registry of not-real plugins
+ZINIT_REGISTERED_PLUGINS[-3,-1]=()
 
 zle -N zi÷browse-symbol
 zle -N zi÷browse-symbol-backwards zi÷browse-symbol
