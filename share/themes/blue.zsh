@@ -1,5 +1,5 @@
 # -*- mode: sh; sh-indentation: 4; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
-# Copyright (c) 2016-2020 Sebastian Gniazdowski and contributors.
+# Copyright (c) 2016-2023 Sebastian Gniazdowski and contributors.
 
  ZINIT+=(
     col-annex   $'\e[38;5;57m'         col-faint   $'\e[38;5;238m'         col-msg2    $'\e[38;5;172m'
