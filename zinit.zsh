@@ -3202,7 +3202,7 @@ zpcompdef() {
 #
 # Source-executed code.
 #
-
+ 
 # code [[[
 if [[ -z $ZINIT[NO_ALIASES] ]]; then
     builtin alias zi=zinit
@@ -3211,11 +3211,11 @@ fi
 
 (( ZINIT[ALIASES_OPT] )) && builtin setopt aliases
 
+(( ZINIT[SOURCED] ++ )) && return 0
+
 if [[ -f ~/.zsh-plugins.zsh && $ZINIT[NO_PLGS_SRC] != 1 ]];then
     builtin source ~/.zsh-plugins.zsh
 fi
-
-(( ZINIT[SOURCED] ++ )) && return 0
 
 builtin autoload -Uz add-zsh-hook
 if { zmodload zsh/datetime } {
@@ -3316,9 +3316,15 @@ if [[ -e ${${ZINIT[BIN_DIR]}}/zmodules/Src/zdharma/zplugin.so ]] {
 typeset -g REPLY MATCH reply=() match=() mbegin=() mend=()
 typeset -gi MEND MBEGIN
 
-#
-# set up named directories ~[plug-name], and others
-#
+alias -g '[[:WRONGSTR:]]'='([[:cntrl:][:space:][:INCOMPLETE:][:INVALID:]]#|*[[:INCOMPLETE:][:INVALID:]]*|[[:cntrl:]]#|[^[:print:][:alnum:]]#)'
+
+alias -g '[[:iNVALIDST:]]'='*[[:INCOMPLETE:][:INVALID:]]*'
+alias -g '[[:IDSTR:]]'='(<->|[A-Za-z_][A-Za-z_0-9]#)'
+alias -g '[[:PRINTSTR:]]'='([[:print:][:alnum:]]#)'
+alias -g '[[:EMPTYSTR:]]'="[[:space:][:INCOMPLETE:][:INVALID:]$'\e\1'-$'\036']#"
+alias -g '[[:EMINVSTR:]]'="([[:space:][:INCOMPLETE:][:INVALID:]$'\e\1'-$'\036'-g:(<->|[A-Za-z_][A-Za-z_0-9]#)
+]#|*[[:INCOMPLETE:][:INVALID:]]*)"
+alias -g '[[:FUNCSTR:]]'="[[:space:]]#(function[[:space:]]##|)(#b)((#B)*)(#B)[[:space:]]#\([[:space:]]#\)([[:space:]]#\{|)*"
 
 zinit null light-mode autoload'z4_directory_name_generic' \
     for %$ZINIT[BIN_DIR]
@@ -3327,6 +3333,7 @@ z4_zdn_widget(){z4_directory_name_generic "$@";}
 add-zsh-hook -U zsh_directory_name z4_zdn_widget
 
 (){
+
 setopt localoptions extendedglob
 typeset -Ag z4_zdn_top z4_zdn_level1 z4_gitdir_zdn_level1 \
         z4_zdn_zplug_level1=(:default: z4_zdn_level1) \
@@ -3366,7 +3373,6 @@ ZINIT_TMP=($ZINIT[SNIPPETS_DIR]/*[[:alnum:]](N.,/,@))
 ZINIT_TMP=($ZINIT[PLUGINS_DIR]/*[[:alnum:]](N.,/,@))
 : ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_top[${${match[1]:t}##*---}]::=$match[1]}}
 : ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_zplug_level1[${${match[1]:t}##*---}]::=${match[1]:t}}}
-
 
 z4_zdn_level1+=(
     share       share
