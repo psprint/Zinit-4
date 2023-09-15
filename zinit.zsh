@@ -159,12 +159,17 @@ ZINIT[PLUGINS_DIR]=${~ZINIT[PLUGINS_DIR]}   ZINIT[COMPLETIONS_DIR]=${~ZINIT[COMP
 ZINIT[SNIPPETS_DIR]=${~ZINIT[SNIPPETS_DIR]} ZINIT[SERVICES_DIR]=${~ZINIT[SERVICES_DIR]}
 export ZPFX=${~ZPFX} ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/z4}" \
     PMSPEC=0uUpiPsf
+ZINIT[BINPATH]=${${(M)ZSH_NAME#/*}:-=$ZSH_NAME}
+
+typeset -g +U path PATH
 [[ -z ${path[(re)$ZPFX/bin]} ]] && [[ -d "$ZPFX/bin" ]] && path=( "$ZPFX/bin" "${path[@]}" )
 [[ -z ${path[(re)$ZPFX/sbin]} ]] && [[ -d "$ZPFX/sbin" ]] && path=( "$ZPFX/sbin" "${path[@]}" )
 typeset -gU PATH path
 
 # Add completions directory to fpath.
+typeset +U fpath FPATH
 [[ -z ${fpath[(re)${ZINIT[COMPLETIONS_DIR]}]} ]] && fpath=( "${ZINIT[COMPLETIONS_DIR]}" "${fpath[@]}" )
+typeset -U fpath FPATH
 
 [[ ! -d $ZSH_CACHE_DIR ]] && command mkdir -p "$ZSH_CACHE_DIR"
 [[ -n ${ZINIT[ZCOMPDUMP_PATH]} ]] && ZINIT[ZCOMPDUMP_PATH]=${~ZINIT[ZCOMPDUMP_PATH]}
@@ -3328,7 +3333,7 @@ $ZINIT[SNIPPETS_DIR]/(http(|s)|ftp(|s)|scp|file)--*/*[[:alnum:]_÷-](N.,/,@))
             local PID=${${ZINIT_TMP:t}//---//}
         fi
         local IDAS=${${ZINIT_TMP:t}//---//}
-        functions[::$PID]="
+        functions[@$PID]="
             local OP=\$1 pos=(\"\$@[2,-1]\") ICE ICEV icest=()
             if [[ -f ${(qqq)ZINIT_TMP%/}/._zinit/id-as ]];then
                 local IDAS=\$(<${(qqq)ZINIT_TMP%/}/._zinit/id-as)
@@ -3438,13 +3443,12 @@ z4_zdn_top+=(
     :default:   /:z4_zdn_level1
 )
 
-ZINIT_TMP=${${(M)ZSH_ARGZERO:#/*}:-$PWD/$ZSH_ARGZERO}
-ZINIT_TMP=${ZINIT_TMP%%[^\/]##\/[^\/]##}
-
 z4_zdn_top+=(
-    zfun        ${ZINIT_TMP}share/zsh/$ZSH_VERSION/functions/:zsh_dir_level1
-    zlib        ${ZINIT_TMP}lib/zsh/$ZSH_VERSION
+    zfun        /(usr|)${ZINIT[BINPATH]%%[^\/]#\/[^\/]#}share/zsh/$ZSH_VERSION/functions(NY1)
+    zlib        /(usr|)${ZINIT[BINPATH]%%[^\/]#\/[^\/]#}lib(|64)/zsh/$ZSH_VERSION(NY1)
 )
+
+z4_zdn_top[zfun]+="/:zsh_dir_level"
 
 typeset -A -g zsh_dir_level1=(
 cal Calendar  ex Example     ftpe  MIME     pro Prompts vcs VCS_Info
