@@ -2295,7 +2295,7 @@ $match[7]}:-${ZINIT[__last-formatter-code]}}}:+}}}//←→}
     ___path="${ZINIT[PLUGINS_DIR]}/${id_as//\//---}"/._zinit
     # TODO: snippets dir computation
     if [[ ! -d $___path ]] {
-        if ! .zinit-get-object-path snippet "${id_as//\//---}"; then
+        if ! .zinit-get-object-path snippet "$id_as"; then
             return 1
         fi
         ___path="$REPLY"/._zinit
@@ -3319,34 +3319,41 @@ typeset -gi MEND MBEGIN
 (){
     emulate -L zsh -o extendedglob
     foreach ZINIT_TMP ($ZINIT[PLUGINS_DIR]/*[[:alnum:]](N.,/,@)
-                     $ZINIT[SNIPPETS_DIR]/*[[:alnum:]](N.,/,@))
-        local PID=${${ZINIT_TMP:t}##*---} \
-            IDAS=${${ZINIT_TMP:t}//---//}
+$ZINIT[SNIPPETS_DIR]/*[[:alnum:]_÷-]~*/(http(|s)|ftp(s|)|scp|file)--*(N.,/,@)
+$ZINIT[SNIPPETS_DIR]/(http(|s)|ftp(|s)|scp|file)--*/*[[:alnum:]_÷-](N.,/,@))
+        if [[ $ZINIT_TMP == $ZINIT[SNIPPETS_DIR](/*)# ]];then
+            local PID=${${ZINIT_TMP##$ZINIT[SNIPPETS_DIR]\/}//(#b)(http(s|)|ftp(|s)|file|scp)--/$match[1]://}
+            PID=${${PID//--//}:t}
+        else
+            local PID=${${ZINIT_TMP:t}//---//}
+        fi
+        local IDAS=${${ZINIT_TMP:t}//---//}
         functions[::$PID]="
             local OP=\$1 pos=(\"\$@[2,-1]\") ICE ICEV icest=()
+            if [[ -f ${(qqq)ZINIT_TMP%/}/._zinit/id-as ]];then
+                local IDAS=\$(<${(qqq)ZINIT_TMP%/}/._zinit/id-as)
+                [[ -z \$IDAS || \$IDAS == auto ]]&&IDAS=$PID
+            else
+                local IDAS=${(qqq)IDAS}
+            fi
             case \$OP in
-                (cd|cdr)
-                    \$OP -- ${(qqq)ZINIT_TMP}
+                (cd|)
+                    \${OP:-cd} -- ${(qqq)ZINIT_TMP}
                     ;;
                 (load)
-                    if [[ -f ${(qqq)ZINIT_TMP%/}/._zinit/mode ]];then
-                        local IDAS=\$(<${(qqq)ZINIT_TMP%/}/._zinit/url)
-                    else
-                        local IDAS=${(qqq)IDAS}
-                    fi
                     local -A ICE
                     .zinit-load-ices \$IDAS
                     foreach ICE ICEV (\"\${(@kv)ICE}\")
                         icest+=(\$ICE\$ICEV)
                     end
-                    
-                    zinit \"\$icest[@]\" for \$IDAS
+                    #print -- zinit \"\$icest[@]\" for @\$IDAS
+                    zinit \"\$icest[@]\" for @\$IDAS
                     ;;
                 (unload)
-                    zinit unload ${(qqq)IDAS} \"\$pos[@]\"
+                    zinit unload \$IDAS \"\$pos[@]\"
                     ;;
                 (update|status)
-                    zinit \$OP ${(qqq)IDAS} \"\$pos[@]\"
+                    zinit \$OP \$IDAS \"\$pos[@]\"
                     ;;
                 (run|*)
                     [[ \$OP == run ]]&&OP=
@@ -3358,8 +3365,8 @@ typeset -gi MEND MBEGIN
             esac
         "
     end
-
 }
+
 
 alias -g '[[:WRONGSTR:]]'='([[:cntrl:][:space:][:INCOMPLETE:][:INVALID:]]#|*[[:INCOMPLETE:][:INVALID:]]*|[[:cntrl:]]#|[^[:print:][:alnum:]]#)'
 
@@ -3370,7 +3377,6 @@ alias -g '[[:EMPTYSTR:]]'="[[:space:][:INCOMPLETE:][:INVALID:]$'\e\1'-$'\036']#"
 alias -g '[[:EMINVSTR:]]'="([[:space:][:INCOMPLETE:][:INVALID:]$'\e\1'-$'\036'-g:(<->|[A-Za-z_][A-Za-z_0-9]#)
 ]#|*[[:INCOMPLETE:][:INVALID:]]*)"
 alias -g '[[:FUNCSTR:]]'="[[:space:]]#(function[[:space:]]##|)(#b)((#B)*)(#B)[[:space:]]#\([[:space:]]#\)([[:space:]]#\{|)*"
-
 zinit null light-mode autoload'z4_directory_name_generic' \
     for %$ZINIT[BIN_DIR]
 
@@ -3418,19 +3424,31 @@ z4_zdn_top+=(
     zpfx        $ZPFX
     ZPFX        $ZPFX
 
-
     # Default
     :default:   /:z4_zdn_level1
 )
 
-# ~[plug-name] for installed plugin
-ZINIT_TMP=($ZINIT[SNIPPETS_DIR]/*[[:alnum:]](N.,/,@))
-: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_top[${${match[1]:t}##*---}]::=$match[1]}}
-: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_zsnip_level1[${${match[1]:t}##*---}]::=${match[1]:t}}}
+ZINIT_TMP=${${(M)ZSH_ARGZERO:#/*}:-$PWD/$ZSH_ARGZERO}
+ZINIT_TMP=${ZINIT_TMP%%[^\/]##\/[^\/]##}
+
+z4_zdn_top+=(
+    zfun        ${ZINIT_TMP}share/zsh/$ZSH_VERSION/functions/:zsh_dir_level1
+    zlib        ${ZINIT_TMP}lib/zsh/$ZSH_VERSION
+)
+
+typeset -A -g zsh_dir_level1=(
+cal Calendar  ex Example     ftpe  MIME     pro Prompts vcs VCS_Info
+chpwd Chpwd     exc Exceptions  vari Misc     zftp Zftp
+cpctl Compctl   math Math       user Newuser  tcp TCP    zle Zle
+)
+
+ZINIT_TMP=($ZINIT[SNIPPETS_DIR]/*[[:alnum:]_÷-]~*/(http(|s)|ftp(s|)|scp|file)--*(N.,/,@) $ZINIT[SNIPPETS_DIR]/(http(|s)|ftp(|s)|scp|file)--*/*[[:alnum:]_÷-](N.,/,@))
+: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_top[${${${match[1]//(http(s|)|ftp(|s)|file|scp)--/proto://}//--//}:t}]::=$match[1]}}
+: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_zsnip_level1[${${${match[1]//(http(s|)|ftp(|s)|file|scp)--/proto://}//--//}:t}]::=$match[1]}}
 
 ZINIT_TMP=($ZINIT[PLUGINS_DIR]/*[[:alnum:]](N.,/,@))
-: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_top[${${match[1]:t}##*---}]::=$match[1]}}
-: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_zplug_level1[${${match[1]:t}##*---}]::=${match[1]:t}}}
+: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_top[${${match[1]:t}//---//}]::=$match[1]}}
+: ${ZINIT_TMP[@]//(#b)(*)/${z4_zdn_zplug_level1[${${match[1]:t}//---//}]::=${match[1]:t}}}
 
 z4_zdn_level1+=(
     share       share
