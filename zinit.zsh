@@ -3355,6 +3355,9 @@ $ZINIT[SNIPPETS_DIR]/(http(|s)|ftp(|s)|scp|file)--*/*[[:alnum:]_÷-](N.,/,@))
                 (update|status)
                     zinit \$OP \$IDAS \"\$pos[@]\"
                     ;;
+                (dispose)
+                    zinit delete -y \$IDAS
+                    ;;
                 (run|*)
                     [[ \$OP == run ]]&&OP=
                     (
@@ -3417,6 +3420,13 @@ z4_zdn_top+=(
     z4plug      $ZINIT[PLUGINS_DIR]/:z4_zdn_zplug_level1
     ztheme      $ZINIT[THEME_DIR]
     z4theme     $ZINIT[THEME_DIR]
+    zcache      $ZSH_CACHE_DIR
+    z4cache     $ZSH_CACHE_DIR
+
+    bin   $HOME/.local/bin
+    cfg   ${XDG_CONFIG_HOME:-$HOME/.config}
+    cache ${XDG_CACHE_HOME:-$HOME/.cache}
+    data  ${XDG_DATA_HOME:-$HOME/.local/share}
 
     # Z-Prefix's words
     zp          $ZPFX
