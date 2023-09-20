@@ -2,26 +2,10 @@
 
 Zinit 4 comes with the following features that are different from Zinit (@zdharma-continuum fork).
 
-- AppImage distribution ([release link](https://github.com/psprint/Zinit-4/releases/tag/v4.0.1)),
-- action complete – press `Alt-Shift-A` or `Alt-Shift-C` to **complete** plugin names and ice modifiers at the command line; asciicast on action-complete9:
-  [![asciicast](https://asciinema.org/a/609096.svg)](https://asciinema.org/a/609096)
-- themes – set `$ZITHEME` to one of `default`, `blue`.`gold` and `pastel` to pick a color set to use for **`Zinit 4`** messages:
-    - default theme:
-    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/def-in.png?raw=true)
-    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/def-w.png?raw=true)
-
-    - blue theme:
-    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/blue-in.png?raw=true)
-    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/blue-w.png?raw=true)
-
-    - gold theme:
-    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/gold-in.png?raw=true)
-    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/gold-w.png?raw=true)
-
-- new ice `build''` which is equivalent of three other ices: `null configure make'install` and simply builds the project from sources, with support for autotools/CMake/Meson/Scons; the project will be installed to `~/.z4` (the default `$ZPFX`, which is cutomizable), see a presentation: [![asciicast](https://asciinema.org/a/609101.svg)](https://asciinema.org/a/609101)
+## Ver. 4.0.8
 - each plugin has a separate function defined: `@[plugin-id]`; so for example the plugin `psprint/xzmsg` has a function `@psprint/xzmsg`; the function allows quick actions for all plugins, being:
     - `cd` – change directory to plugin dir,
-    - `load` – load the plugin,
+  '  - `load` – load the plugin,
     - `unload` – unload plugin,
     - `update` – update the plugin,
     - `status` – show plugin status (↔ zinit statuus …),
@@ -39,3 +23,21 @@ Zinit 4 comes with the following features that are different from Zinit (@zdharm
     - `~[cfg]` – the same, but for `$XDG_CONFIG_HOME`,
     - many others, see the complete list after pressing TAB with cursor after: `~[…]`.
 
+## Ver. 4.0.3
+- AppImage distribution ([release link](https://github.com/psprint/Zinit-4/releases/tag/v4.0.1)),
+- action complete – press `Alt-Shift-A` or `Alt-Shift-C` to **complete** plugin names and ice modifiers at the command line; asciicast on action-complete9:
+  [![asciicast](https://asciinema.org/a/609096.svg)](https://asciinema.org/a/609096)
+- themes – set `$ZITHEME` to one of `default`, `blue`.`gold` and `pastel` to pick a color set to use for **`Zinit 4`** messages:
+    - default theme:
+    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/def-in.png?raw=true)
+    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/def-w.png?raw=true)
+
+    - blue theme:
+    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/blue-in.png?raw=true)
+    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/blue-w.png?raw=true)
+
+    - gold theme:
+    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/gold-in.png?raw=true)
+    ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/gold-w.png?raw=true)
+
+- new ice `build''` which is equivalent of three other ices: `null configure make'install` and simply builds the project from sources, with support for autotools/CMake/Meson/Scons; the project will be installed to `~/.z4` (the default `$ZPFX`, which is cutomizable), see a presentation: [![asciicast](https://asciinema.org/a/609101.svg)](https://asciinema.org/a/609101)
