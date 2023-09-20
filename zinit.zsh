@@ -138,7 +138,7 @@ xclone|\
 xgh-clone|\
 xfetch|\
 x-tract|\
-xconsole"
+xcon"
 
 # Can be customized.
 : ${ZINIT[COMPLETIONS_DIR]:=${ZINIT[HOME_DIR]}/completions}
