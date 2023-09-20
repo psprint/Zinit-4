@@ -3436,7 +3436,7 @@ z4_zdn_top+=(
     ZPFX        $ZPFX
 
     # Default
-    :default:   /:z4_zdn_level1
+    #:default:   /:z4_zdn_level1
 )
 
 z4_zdn_top+=(
@@ -3466,7 +3466,7 @@ z4_zdn_level1+=(
     libexec     libexec
     bin         bin
     func        functions
-    scripts     scripts
+#    scripts     scripts
     docs        docs
     src         src
     contrib     contrib
