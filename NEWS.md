@@ -3,7 +3,7 @@
 Zinit 4 comes with the following features that are different from Zinit (@zdharma-continuum fork).
 
 - AppImage distribution ([release link](https://github.com/psprint/Zinit-4/releases/tag/v4.0.1)),
-- action complete – press `Alt-Shift-A` and `Alt-Shift-C` to **complete** plugin names and ice modifiers at the command line,
+- action complete – press `Alt-Shift-A` or `Alt-Shift-C` to **complete** plugin names and ice modifiers at the command line; asciicast on action-complete9:
   [![asciicast](https://asciinema.org/a/609096.svg)](https://asciinema.org/a/609096)
 - themes – set `$ZITHEME` to one of `default`, `blue`.`gold` and `pastel` to pick a color set to use for **`Zinit 4`** messages:
     - default theme:
@@ -18,7 +18,7 @@ Zinit 4 comes with the following features that are different from Zinit (@zdharm
     ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/gold-in.png?raw=true)
     ![default](https://github.com/psprint/Zinit-4/blob/main/doc/img/gold-w.png?raw=true)
 
-- new ice `build''` which is equivalent of three other ices: `null configure make'install` and simply builds the project from sources, with support for autotools/CMake/Meson/Scons; the project will be installed to `~/.z4` (default $ZPFX`), see a presentation: [![asciicast](https://asciinema.org/a/609101.svg)](https://asciinema.org/a/609101)
+- new ice `build''` which is equivalent of three other ices: `null configure make'install` and simply builds the project from sources, with support for autotools/CMake/Meson/Scons; the project will be installed to `~/.z4` (the default `$ZPFX`, which is cutomizable), see a presentation: [![asciicast](https://asciinema.org/a/609101.svg)](https://asciinema.org/a/609101)
 - each plugin has a separate function defined: `@[plugin-id]`; so for example the plugin `psprint/xzmsg` has a function `@psprint/xzmsg`; the function allows quick actions for all plugins, being:
     - `cd` – change directory to plugin dir,
     - `load` – load the plugin,
@@ -28,8 +28,8 @@ Zinit 4 comes with the following features that are different from Zinit (@zdharm
     - `run` – run a command in the plugin dir,
     - `dispose` – `rm -fr` on the plugin dir;
 
-    so, to run the action pass it as first argument, e.g.: `@psprint/xzmsg cd`.
-- each plugin (+ some other, distinct location) has a special alias (Zsh internal feature) of the form: `~[plugin-name]`; so for example `psprnit/xzmsg` has `~[psprint/xzmsg]` defined, ponting to the **plugin directory**; you can use the `~[…]` alias in all commands, e.g.: for `cd`,
+    to run the action pass it as first argument of the plugin *`@function`* of your choice, e.g.: `@psprint/xzmsg cd` (in this example the shell will change CWD to `xzmsg` directory); presentation: [![asciicast](https://asciinema.org/a/609154.svg)](https://asciinema.org/a/609154)
+- each plugin (+ some other, distinct location) has a special alias (Zsh internal feature) of the form: `~[plugin-name]`; so for example `psprnit/xzmsg` has `~[psprint/xzmsg]` defined, ponting to the **plugin directory**; you can use the `~[…]` alias in all commands, e.g.: for `cd`; the feature is called "*dynamic directoies*" in zsh documentation,
 - the mentioned distinct location are:
     - `~[zplug]` – the plugin dir (`$ZINIT[PLUGINS_DIR`),
     - `~[zsnip]` – the plugin dir (`$ZINIT[SNIPPETS_DIR]`),
