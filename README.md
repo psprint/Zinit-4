@@ -82,7 +82,7 @@ This is **`Zinit 4`** from the [original author](https://github.com/psprint). I'
 - themes – set `$ZITHEME` to one of `default`, `blue` and `gold` to set a color set to use for **`Zinit 4`** messages,
 - new ice `build''` which is equivalent of three other ices: `null configure make'install` and simply builds the project from sources, with support for autotools/CMake/Meson/Scons.
 
-These are the most visible changes, but there are more (like e.g.: support for compiling with libraries from previously built projects/`$ZPFX`).
+These are the most visible changes, but there are more (like e.g.: support for compiling with libraries from previously built projects/`$ZPFX`). For full list of Zinit 4 features, see [NEWS.md](NEWS.md).
 
 
 
