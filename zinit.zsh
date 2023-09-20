@@ -3519,6 +3519,18 @@ zstyle -s ":zinit:action-complete:ice" key ZINIT_TMP || ZINIT_TMP='\eC'
 [[ $CMAKE_PREFIX_PATH != (|*\;)$ZPFX(|\;*) ]]&&CMAKE_PREFIX_PATH="$ZPFX:$CMAKE_PREFIX_PATH"
 [[ $LD_LIBRARY_PATH != (|*:)$ZPFX/lib(|64)(|:*) ]]&&LD_LIBRARY_PATH="$ZPFX/lib:$ZPFX/lib64:$LD_LIBRARY_PATH"
 
+.zinit-set-zstyle(){ 
+    local -U -a ZINIT_TMP
+    zstyle -a ':completion:*:functions' ignored-patterns ZINIT_TMP
+    ZINIT_TMP+=(@autoload)
+    zstyle ":completion:*:functions" ignored-patterns $ZINIT_TMP
+}
+
+zinit null wait lucid atload'.zinit-set-zstyle' for \
+    %$ZINIT[BIN_DIR]
+ZINIT_REGISTERED_PLUGINS[-1]=()
+
+
 # Local Variables:
 # mode: Shell-Script
 # sh-indentation: 2
