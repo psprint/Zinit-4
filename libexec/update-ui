@@ -1,0 +1,87 @@
+#!/usr/bin/env zsh
+emulate -L zsh -o extendedglob -o typesetsilent
+0=${${ZERO:-${(%):-%x}}:A}
+ZUI_DIR=$0:h:h/lib/zui-lib ZINIT_DIR=$0:h:h
+source $ZUI_DIR/zui.lib.zsh||return 1
+local -A ZINIT=(NO_PLGS_SRC 1)
+source $ZINIT_DIR/zinit.zsh
+fpath+=($ZINIT_DIR/functions)
+builtin autoload -z \
+    $ZINIT_DIR/functions/*[A-Za-z0-9](.,@:t)
+
+-zui_glib_cleanup deserialize:"zui-demo-configure"
+-zui_glib_init app:"zui-demo-configure" app_name:"ZUI Configure/Make wrapper"
+emulate -LR zsh -o extendedglob -o typesetsilent -o warncreateglobal
+-zui_glib_init2 # after emulate -LR
+
+-zui_glib_store_default_app_config s:timeout 300
+-zui_glib_store_default_app_config s:text_mode off
+
+local -a coproc_output
+local ustarted=0 pstarted=0  # denote if configure/make is running
+
+demo_generator_A() {
+    local mod="$1" ice="$2"
+
+    reply=()
+    -zui_glib_rc_button "button1" "${ZUI[GREEN]}Run zinit update --all${ZUI[FMT_END]}" 'internal=1; coproc 2>&1 zinit update --all; ustarted=1'
+    -zui_glib_rc_button "button2" "${ZUI[YELLOW]}Job status${ZUI[FMT_END]}" 'internal=1; get_zinit_update_pid'
+    -zui_glib_rc_button "button3" "${ZUI[GREEN]}Run parallel zinit update${ZUI[FMT_END]}" 'internal=1; coproc 2>&1 zinit update --all -p; pstarted=1'
+
+    # Content
+    reply=( "${reply[1]} ${reply[2]} ${reply[3]}" )
+
+    # Non-selectable lines  Hops to jump with [ and ]   Local anchors
+    reply2=( )              reply3=( 1 )                reply4=( )
+}
+
+demo_generator_B() {
+    reply=()
+    -zui_glib_special_text "Configure/Make output"
+    -zui_glib_button "button4" "${ZUI[MAGENTA]}(clear)${ZUI[FMT_END]}" 'internal=1; coproc_output=( ); -zui_glib_fly_mod_regen 2 1'
+    reply=( "${ZUI[YELLOW]}${reply[1]}${ZUI[FMT_END]} ${reply[2]}" "${coproc_output[@]}" )  reply2=( )  reply3=( 1 )  reply4=( )
+}
+
+# Read & publish configure/make output
+-zui-standard-timeout-callback() {
+    (( pstarted + ustarted == 0 )) && return
+
+    local line had_read=0
+    repeat 20; do
+        read -r -p -t 0 line 2>/dev/null && { 
+            had_read=1
+            z4÷colreduce "$line"
+                coproc_output+=("$REPLY")
+        } || break
+    done
+
+    ((had_read))&&-zui_glib_fly_mod_regen 2 1
+    ((pstarted!=0&&had_read==0))&&[[ $jobtexts[*] != *zinit* ]] && {repeat 3 {print -n -- ${terminfo[bel]:-$'\07'};LANG=C sleep 0.1;};ZUI[redraw]=1; pstarted=0; -zui_glib_msg "EVENT!: " "zinit update --all -p" " ended";}
+    (( ustarted != 0 && had_read == 0 )) && [[ $jobtexts[*] != *zinit* ]] && { repeat 3 {print -n -- ${terminfo[bel]:-$'\07'};LANG=C sleep 0.1;}; ZUI[redraw]=1; ustarted=0; -zui_glib_msg "EVENT!: " "zinit update --all" " ended"; }
+}
+
+get_zinit_update_pid() {
+    emulate -L zsh -o extendedglob
+    local JOB TMP TXT
+    local -a BITS=()
+    if (($#jobstates==0));then
+        -zui_glib_msg "READY" ", No jobs running"
+        return 0
+    fi
+    foreach JOB (${(k)jobtexts})
+        TXT=$jobtexts[$JOB] TMP=$jobstates[$JOB]
+        TXT=${TXT//[[:space:]]#[0-9]#\>\&[0-9]##/}
+        BITS=("JOB[$JOB]: " "$TXT" " – " STATE: ${TMP%%:*}/ PID:${${(MS)TMP##[0-9]##\=}%\=}\ )
+        -zui_glib_msg "$BITS[@]"
+    end
+    return 1
+}
+
+## Start application ##
+zui-event-loop 1:demo_generator_A 1:demo_generator_B
+
+-zui_glib_cleanup serialize
+
+return 0
+
+# vim:ft=zsh
