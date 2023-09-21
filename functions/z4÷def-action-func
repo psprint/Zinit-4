@@ -1,0 +1,58 @@
+#!/usr/bin/env zsh
+z4÷def-action-func(){
+    builtin emulate -L zsh -o extendedglob \
+            -o warncreateglobal -o typesetsilent \
+            -o nopromptsubst
+
+    local TMP_PATH
+    foreach TMP_PATH ($ZINIT[PLUGINS_DIR]/*[[:alnum:]](N.,/,@)
+    $ZINIT[SNIPPETS_DIR]/*[[:alnum:]_÷-]~*/(http(|s)|ftp(s|)|scp|file)--*(N.,/,@)
+    $ZINIT[SNIPPETS_DIR]/(http(|s)|ftp(|s)|scp|file)--*/*[[:alnum:]_÷-](N.,/,@))
+        if [[ $TMP_PATH == $ZINIT[SNIPPETS_DIR](/*)# ]];then
+            local PID=${${TMP_PATH##$ZINIT[SNIPPETS_DIR]\/}//(#b)(http(s|)|ftp(|s)|file|scp)--/$match[1]://}
+            PID=${${PID//--//}:t}
+        else
+            local PID=${${TMP_PATH:t}//---//}
+        fi
+        local IDAS=${${TMP_PATH:t}//---//}
+        functions[@$PID]="
+            local OP=\$1 pos=(\"\$@[2,-1]\") ICE ICEV icest=()
+            if [[ -f ${(qqq)TMP_PATH%/}/._zinit/id-as ]];then
+                local IDAS=\$(<${(qqq)TMP_PATH%/}/._zinit/id-as)
+                [[ -z \$IDAS || \$IDAS == auto ]]&&IDAS=$PID
+            else
+                local IDAS=${(qqq)IDAS}
+            fi
+            case \$OP in
+                (cd|)
+                    \${OP:-cd} -- ${(qqq)TMP_PATH}
+                    ;;
+                (load)
+                    local -A ICE
+                    .zinit-load-ices \$IDAS
+                    foreach ICE ICEV (\"\${(@kv)ICE}\")
+                        icest+=(\$ICE\$ICEV)
+                    end
+                    #print -- zinit \"\$icest[@]\" for @\$IDAS
+                    zinit \"\$icest[@]\" for @\$IDAS
+                    ;;
+                (unload)
+                    zinit unload \$IDAS \"\$pos[@]\"
+                    ;;
+                (update|status)
+                    zinit \$OP \$IDAS \"\$pos[@]\"
+                    ;;
+                (dispose)
+                    zinit delete -y \$IDAS
+                    ;;
+                (run|*)
+                    [[ \$OP == run ]]&&OP=
+                    (
+                        builtin cd -q -- ${(qqq)TMP_PATH}||return 1
+                        builtin eval \$OP \"\$pos[@]\"
+                    )
+                    ;;
+            esac
+        "
+    end
+}

@@ -1,0 +1,102 @@
+#!/usr/bin/env zsh
+z4÷populate-dynamic-dir(){
+    builtin emulate -L zsh -o extendedglob \
+            -o warncreateglobal -o typesetsilent \
+            -o nopromptsubst
+
+    z4_zdn_widget(){z4_directory_name_generic "$@";}
+    add-zsh-hook -U zsh_directory_name z4_zdn_widget
+    z4_dir_suffix() {
+        [[ $1 = 1 ]] || return
+
+        if [[ $LBUFFER[-1] != ']' ]]; then
+            if [[ $KEYS = [$'] \t\n/']## ]]; then
+                if [[ $LBUFFER[-1] == ':' ]];then
+                    LBUFFER="$LBUFFER[1,-2]"
+                fi
+                LBUFFER+=${${${KEYS:#*\]*}:+\]}:-${kEYS//\]/}}
+            elif [[ $KEYS = (*[^[:print:]]*|[[:blank:]\;\&\|@]) ]]; then
+                LBUFFER="$LBUFFER[1,-2]"\]
+            fi
+        fi
+    }
+
+    typeset -Ag z4_zdn_top=() z4_zdn_level1=() z4_gitdir_zdn_level1=() \
+            z4_zdn_zplug_level1=(:default: z4_zdn_level1) \
+            z4_zdn_zsnip_level1=(:default: z4_zdn_level1)
+    zstyle ":zdn:z4_zdn_widget:" mapping z4_zdn_top
+    z4_zdn_top+=(
+        # Zinit4's system diectories
+        z           $ZINIT[BIN_DIR]/:z4_gitdir_zdn_level1
+        z4          $ZINIT[BIN_DIR]/:z4_gitdir_zdn_level1
+        zbin        $ZINIT[BIN_DIR]/:z4_gitdir_zdn_level1
+        z4bin       $ZINIT[BIN_DIR]/:z4_gitdir_zdn_level1
+        zcompl      $ZINIT[COMPLETIONS_DIR]
+        z4compl     $ZINIT[COMPLETIONS_DIR]
+        zsnip       $ZINIT[SNIPPETS_DIR]/:z4_zdn_zsnip_level1
+        z4snip      $ZINIT[SNIPPETS_DIR]/:z4_zdn_zsnip_level1
+        zplug       $ZINIT[PLUGINS_DIR]/:z4_zdn_zplug_level1
+        z4plug      $ZINIT[PLUGINS_DIR]/:z4_zdn_zplug_level1
+        ztheme      $ZINIT[THEME_DIR]
+        z4theme     $ZINIT[THEME_DIR]
+        zcache      $ZSH_CACHE_DIR
+        z4cache     $ZSH_CACHE_DIR
+
+        bin   $HOME/.local/bin
+        cfg   ${XDG_CONFIG_HOME:-$HOME/.config}
+        cache ${XDG_CACHE_HOME:-$HOME/.cache}
+        data  ${XDG_DATA_HOME:-$HOME/.local/share}
+
+        # Z-Prefix's words
+        zp          $ZPFX
+        ZP          $ZPFX
+        zpfx        $ZPFX
+        ZPFX        $ZPFX
+
+        # Default
+        #:default:   /:z4_zdn_level1
+    )
+
+    z4_zdn_top+=(
+        zfun        /(usr|)${ZINIT[BINPATH]%%[^\/]#\/[^\/]#}share/zsh/$ZSH_VERSION/functions(NY1)
+        zlib        /(usr|)${ZINIT[BINPATH]%%[^\/]#\/[^\/]#}lib(|64)/zsh/$ZSH_VERSION(NY1)
+    )
+
+    z4_zdn_top[zfun]+="/:zsh_dir_level"
+
+    typeset -A -g zsh_dir_level1=(
+    cal Calendar  ex Example     ftpe  MIME     pro Prompts vcs VCS_Info
+    chpwd Chpwd     exc Exceptions  vari Misc     zftp Zftp
+    cpctl Compctl   math Math       user Newuser  tcp TCP    zle Zle
+    )
+
+    local -a tmp
+    tmp=($ZINIT[SNIPPETS_DIR]/*[[:alnum:]_÷-]~*/(http(|s)|ftp(s|)|scp|file)--*(N.,/,@) $ZINIT[SNIPPETS_DIR]/(http(|s)|ftp(|s)|scp|file)--*/*[[:alnum:]_÷-](N.,/,@))
+    : ${tmp[@]//(#b)(*)/${z4_zdn_top[${${${match[1]//(http(s|)|ftp(|s)|file|scp)--/proto://}//--//}:t}]::=$match[1]}}
+    : ${tmp[@]//(#b)(*)/${z4_zdn_zsnip_level1[${${${match[1]//(http(s|)|ftp(|s)|file|scp)--/proto://}//--//}:t}]::=$match[1]}}
+
+    tmp=($ZINIT[PLUGINS_DIR]/*[[:alnum:]](N.,/,@))
+    : ${tmp[@]//(#b)(*)/${z4_zdn_top[${${match[1]:t}//---//}]::=$match[1]}}
+    : ${tmp[@]//(#b)(*)/${z4_zdn_zplug_level1[${${match[1]:t}//---//}]::=${match[1]:t}}}
+
+    z4_zdn_level1+=(
+        share       share
+        lib         lib
+        libexec     libexec
+        bin         bin
+        func        functions
+    #    scripts     scripts
+        docs        docs
+        src         src
+        contrib     contrib
+    )
+
+    z4_gitdir_zdn_level1+=(
+        share       share
+        lib         lib
+        libexec     libexec
+        func        functions
+        scripts     scripts
+        doc         doc
+    )
+}

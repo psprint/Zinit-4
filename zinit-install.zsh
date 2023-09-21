@@ -2517,6 +2517,11 @@ for its found {file}meson.build{pre} input file}:-because {flag}m{pre} \
         }
     }
 } # ]]]
+# FUNCTION: ∞zinit-func-dyn-dir-hook [[[
+∞zinit-func-dyn-dir-hook() {
+    z4÷populate-dynamic-dir
+    z4÷def-action-func
+} # ]]]
 # FUNCTION: ∞zinit-atpull-e-hook [[[
 ∞zinit-atpull-e-hook() {
     (( ${+ICE[atpull]} )) || return 0

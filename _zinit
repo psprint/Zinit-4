@@ -57,6 +57,10 @@ __zinit_commands(){
     'update:Upgrade outdated plugins and snippets using the same options they were originally installed with'
     'version:Print the version numbers of Zinit to standard output'
     'zstatus:Overall Zinit status'
+    'xhop:Deploy a code snippet that jumps back'
+    'xclone:Git clone with animated progress bar'
+    'xgh-clone:GitHub clone with fancy progress, only user/repo required'
+    'xcon:A build console with support for opening files on errors'
   )
   _describe -t commands 'zinit commands' commands
 } # ]]]

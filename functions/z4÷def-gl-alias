@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+z4÷def-gl-alias(){
+
+alias -g '[[:WRONGSTR:]]'='([[:cntrl:][:space:][:INCOMPLETE:][:INVALID:]]#|*[[:INCOMPLETE:][:INVALID:]]*|[[:cntrl:]]#|[^[:print:][:alnum:]]#)'
+
+alias -g '[[:iNVALIDST:]]'='*[[:INCOMPLETE:][:INVALID:]]*'
+alias -g '[[:IDSTR:]]'='(<->|[A-Za-z_][A-Za-z_0-9]#)'
+alias -g '[[:PRINTSTR:]]'='([[:print:][:alnum:]]#)'
+alias -g '[[:EMPTYSTR:]]'="[[:space:][:INCOMPLETE:][:INVALID:]$'\e\1'-$'\036']#"
+alias -g '[[:EMINVSTR:]]'="([[:space:][:INCOMPLETE:][:INVALID:]$'\e\1'-$'\036'-g:(<->|[A-Za-z_][A-Za-z_0-9]#)]#|*[[:INCOMPLETE:][:INVALID:]]*)"
+alias -g '[[:FUNCSTR:]]'="[[:space:]]#(function[[:space:]]##|)(#b)((#B)*)(#B)[[:space:]]#\([[:space:]]#\)([[:space:]]#\{|)*"
+
+}
