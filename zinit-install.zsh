@@ -473,26 +473,29 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
                 }
             done
 
-            # Run annexes' atclone hooks (the after atclone-ice ones)
-            reply=(
-                ${(on)ZINIT_EXTS2[(I)zinit hook:atclone-pre <->]}
-                ${(on)ZINIT_EXTS[(I)z-annex hook:atclone-<-> <->]}
-                ${(on)ZINIT_EXTS2[(I)zinit hook:atclone-post <->]}
-            )
-            for key in "${reply[@]}"; do
-                arr=( "${(Q)${(z@)ZINIT_EXTS[$key]:-$ZINIT_EXTS2[$key]}[@]}" )
-                "${arr[5]}" plugin "$user" "$plugin" "$id_as" "$local_path" "${${key##(zinit|z-annex) hook:}%% <->}"
-                hook_rc=$?
-                [[ "$hook_rc" -ne 0 ]] && {
-                    retval="$hook_rc"
-                    builtin print -Pr -- "${ZINIT[col-warn]}Warning:%f%b ${ZINIT[col-obj]}${arr[5]}${ZINIT[col-warn]} hook returned with ${ZINIT[col-obj]}${hook_rc}${ZINIT[col-rst]}"
-                }
-            done
         }
 
         return "$retval"
     ) || return $?
 
+    if [[ $update != -u ]] {
+        # Run annexes' atclone hooks (the after atclone-ice ones)
+        reply=(
+            ${(on)ZINIT_EXTS2[(I)zinit hook:atclone-pre <->]}
+            ${(on)ZINIT_EXTS[(I)z-annex hook:atclone-<-> <->]}
+            ${(on)ZINIT_EXTS2[(I)zinit hook:atclone-post <->]}
+        )
+        local key hook_rc
+        for key in "${reply[@]}"; do
+            arr=( "${(Q)${(z@)ZINIT_EXTS[$key]:-$ZINIT_EXTS2[$key]}[@]}" )
+            "${arr[5]}" plugin "$user" "$plugin" "$id_as" "$local_path" "${${key##(zinit|z-annex) hook:}%% <->}"
+            hook_rc=$?
+            [[ "$hook_rc" -ne 0 ]] && {
+                retval="$hook_rc"
+                builtin print -Pr -- "${ZINIT[col-warn]}Warning:%f%b ${ZINIT[col-obj]}${arr[5]}${ZINIT[col-warn]} hook returned with ${ZINIT[col-obj]}${hook_rc}${ZINIT[col-rst]}"
+            }
+        done
+    }
     typeset -ga INSTALLED_EXECS
     { INSTALLED_EXECS=( "${(@f)$(<${TMPDIR:-/tmp}/zinit-execs.$$.lst)}" ) } 2>/dev/null
 
