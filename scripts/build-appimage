@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+emulate -R zsh -o extendedglob
+
+[[ -z $1 ]]&&\
+    {print -r -- Pass version, exiting;exit 1;}
+[[ $1 != ([^.]##.[^.]##|[^.]##.[^.]##.[^.]##) ]]&&\
+   {print -r -- Wrong version: $1, exiting;exit 1;}
+
+command git clone --depth 1 file://$PWD ./zinit-4
+print -r -- $1 >! ./zinit-4/version.dat
+
+(
+    builtin cd -q -- ./zinit-4
+    ARCH=x86_64 VERSION=$1 appimagetool -v -n .
+    mv -vf z4-$1-x86_64.AppImage ../z4-$1.AppImage
+)
+
+rm -rf ./zinit-4
