@@ -967,7 +967,7 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
 
     if [[ $update = -u && ${OPTS[opt_-q,--quiet]} != 1 ]]; then
         local id_msg_part="{…} (identified as{ehi}:{rst} {id-as}$id_as{rst})"
-        +zi-log "{nl}{info2}Updating snippet: {url}$sname{rst}${ICE[id-as]:+$id_msg_part}"
+        +zi-log {info2}Updating snippet: {url}$sname{rst}${ICE[id-as]:+$id_msg_part}
     fi
 
     # A flag for the annexes. 0 – no new commits, 1 - run-atpull mode,
@@ -1024,8 +1024,8 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
                             # the messages on an actual update
                             if (( OPTS[opt_-q,--quiet] )); then
                                 local id_msg_part="{…} (identified as{ehi}: {id-as}$id_as{rst})"
-                                +zi-log "{nl}{info2}Updating snippet {url}${sname}{rst}${ICE[id-as]:+$id_msg_part}"
-                                +zi-log "Downloading {apo}\`{rst}$sname{apo}\`{rst} (with Subversion){…}"
+                                +zi-log {info2}Updating snippet {url}${sname}{rst}${ICE[id-as]:+$id_msg_part}
+                                +zi-log Downloading {apo}\`{rst}$sname{apo}\`{rst} (with Subversion){…}
                             fi
                             .zinit-mirror-using-svn "$url" "-u" "$dirname" || return 4
                         }
@@ -1537,7 +1537,13 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
     local tag_version=${ICE[ver]}
     if [[ -z $tag_version ]]; then
       local releases_url=https://github.com/$user/$plugin/releases/latest
-      tag_version="$( { .zinit-download-file-stdout $releases_url || .zinit-download-file-stdout $releases_url 1; } 2>/dev/null | command grep -m1 -o 'href=./'$user'/'$plugin'/releases/tag/[^"]\+' )"
+      tag_version="$( { .zinit-download-file-stdout $releases_url || .zinit-download-file-stdout $releases_url 1; } 2>/dev/null | command grep -E -m1 -o 'href=./'$user'/'$plugin'/releases/tag/[^\"'\\\'']+' )"
+      [[ -z $tag_version ]]&&{
+        tag_version="$( { .zinit-download-file-stdout $releases_url || .zinit-download-file-stdout $releases_url 1; } 2>/dev/null | command grep -E -m1 -o 'href=./[^/]+/[^/]+/releases/tag/[^\"'\\\'']+' )"
+        if [[ $tag_version == (#b)href=?[\/]([^\/]##)[\/]([^\/]##)[\/]releases[\/]tag[\/]([^\"\']##) ]];then
+            plugin=$match[2] user=$match[1]
+        fi
+    }
       tag_version=${tag_version##*/}
     fi
     local url=https://github.com/$user/$plugin/releases/expanded_assets/$tag_version
@@ -1574,7 +1580,12 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
     if (( $#list > 1 )) { filtered=( ${list[@]:#(#i)*.(sha[[:digit:]]#|asc)} ) && (( $#filtered > 0 )) && list=( ${filtered[@]} ); }
 
     if (( !$#list )); then
-      +zi-log "{nl}{info}[{pre}gh-r{info}] {error}Error{rst}: No GitHub release assets found for {glob}${tag_version}{rst}"
+      if [[ -n $urlpart ]];then
+        .zinit-get-latest-gh-r-url-part "$user" "$plugin" ""
+        return $?
+      fi
+
+      +zi-log {info}\[{pre}gh-r{info}\] {error}Error{$}: No GitHub release assets found for {version}${tag_version:-unknown version}
       return 1
     fi
     reply+=( "${list[1]}" )

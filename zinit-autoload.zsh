@@ -1797,7 +1797,7 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
     builtin emulate -LR zsh ${=${options[xtrace]:#off}:+-o xtrace}
     setopt extendedglob typesetsilent warncreateglobal
 
-    [[ $1 = -q ]] && +zi-log "{pre}[self-update]{info} updating zinit repository{msg2}" \
+    [[ $1 = -q ]] && +zi-log {pre}\[self-update\] {info}updating zinit repository{rst}
 
     local nl=$'\n' escape=$'\x1b['
     local current_branch=$(git -C $ZINIT[BIN_DIR] rev-parse --abbrev-ref HEAD)
@@ -1805,7 +1805,7 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
     local -a lines
     (
         builtin cd -q "$ZINIT[BIN_DIR]" \
-        && +zi-log -n "{pre}[self-update]{info} fetching latest changes from {obj}$current_branch{info} branch$nl{rst}" \
+        && +zi-log {pre}\[self-update\]{info} fetching latest changes from {ref}$current_branch{info} branch \
         && command git fetch --quiet \
         && lines=( ${(f)"$(command git log --color --date=short --pretty=format:'%Cgreen%cd %h %Creset%s %Cred%d%Creset || %b' ..origin/HEAD)"} )
         if (( ${#lines} > 0 )); then
@@ -2835,7 +2835,7 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
             local PUFILE=$PUDIR/${counter}_$PUFILEMAIN.out
 
             .zinit-any-colorify-as-uspl2 "$uspl"
-            +zi-log "Updating $REPLY{…}" >! $PUFILE
+            +zi-log Updating {pid}$uspl{$}{…}>!$PUFILE
 
             .zinit-any-to-user-plugin "$uspl"
             local user=${reply[-2]} plugin=${reply[-1]}
@@ -2987,18 +2987,17 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
                 }
             }
             if (( ZINIT[annex-multi-flag:pull-active] <= 1 && !OPTS[opt_-q,--quiet] )) {
-                +zi-log "{info}[{pre}${ice[from]}{info}]{rst} latest version ({version}${version}{rst}) already installed"
+                +zi-log "{info}[{pre}${ice[from]}{info}]{rst} latest version ({version}${version}{rst}) already installed{rst}"
             }
         }
 
         if (( 1 )) {
             if (( ZINIT[annex-multi-flag:pull-active] >= 1 )) {
                 if (( OPTS[opt_-q,--quiet] && !PUPDATE )) {
-                    .zinit-any-colorify-as-uspl2 "$id_as"
                     (( ZINIT[first-plugin-mark] )) && {
                         ZINIT[first-plugin-mark]=0
                     } || builtin print
-                    builtin print "\rUpdating $REPLY"
+                    +zi-log Updating {pid}$is_as
                 }
 
                 ICE=( "${(kv)ice[@]}" )
@@ -3049,11 +3048,10 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
                       [[ $had_output -eq 0 ]] && {
                           had_output=1
                           if (( OPTS[opt_-q,--quiet] && !PUPDATE )) {
-                              .zinit-any-colorify-as-uspl2 "$id_as"
                               (( ZINIT[first-plugin-mark] )) && {
                                   ZINIT[first-plugin-mark]=0
                               } || builtin print
-                              builtin print "Updating $REPLY"
+                              +zi-log Updating {pid}$is_as
                           }
                       }
                       builtin print $line
@@ -3078,11 +3076,10 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
 
                       # Handle the snippet/plugin boundary in the messages
                       if (( OPTS[opt_-q,--quiet] && !PUPDATE )) {
-                          .zinit-any-colorify-as-uspl2 "$id_as"
                           (( ZINIT[first-plugin-mark] )) && {
                               ZINIT[first-plugin-mark]=0
                           } || builtin print
-                          builtin print "\rUpdating $REPLY"
+                          +zi-log Updating {pid}$is_as
                       }
                   } else {
                       ZINIT[annex-multi-flag:pull-active]=0
@@ -3287,7 +3284,7 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
         snipps=( ${ZINIT[SNIPPETS_DIR]}/**/(._zinit|._zplugin)(ND) )
 
         [[ $st != status && ${OPTS[opt_-q,--quiet]} != 1 && -n $snipps ]] && \
-            +zi-log "{info}Note:{rst} updating also unloaded snippets"
+            +zi-log {info}Note:{rst} updating also unloaded snippets
 
         for snip ( ${ZINIT[SNIPPETS_DIR]}/**/(._zinit|._zplugin)/mode(D) ) {
             [[ ! -f ${snip:h}/url ]] && continue
@@ -3349,10 +3346,10 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
         fi
 
         if [[ $st = status ]]; then
-            builtin print "\nStatus for plugin $REPLY"
+            +zi-log {nl}Status for plugin {pid}$pd
             ( builtin cd -q "$repo"; command git status )
         else
-            (( !OPTS[opt_-q,--quiet] )) && builtin print "Updating $REPLY" || builtin print -n .
+            (( !OPTS[opt_-q,--quiet] )) && +zi-log Updating {pid}$pd||builtin print -n .
             .zinit-update-or-status update "$user" "$plugin"
             update_rc=$?
             [[ $update_rc -ne 0 ]] && {

@@ -12,7 +12,7 @@ zi÷opt-cascade() {
     shift
     integer EC
     (($#%2))&&\
-        {iqerr incorrect \# of options passed to {func}zi÷opt-cascade;EC=1;}
+        {+zi-log {e} incorrect \# of options passed to {func}zi÷opt-cascade;EC=1;print EC3:$EC>>!io.log;}
 
     # Cascade options to short ones
     for Q P in $@;do

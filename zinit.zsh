@@ -137,6 +137,7 @@ xhop|\
 xclone|\
 xgh-clone|\
 x-tract|\
+xupdate-ui|\
 xcon"
 
 # Can be customized.
@@ -2184,13 +2185,13 @@ $match[7]}:-${ZINIT[__last-formatter-code]}}}:+}}}//←→}
 
     # Needed to correctly end a message with {nl}.
     if [[ -n ${opt:#*n*} || -z $opt ]]; then
-        print -n $'\015'
+        #print -n $'\015'
     fi
 } # ]]]
 # FUNCTION: +zinit-message [[[
 # Wrapper function to maintain backward compatibility
 +zinit-message(){
-    +zi-log $@
+    +zi-log "$@"
 } # ]]]
 
 # FUNCTION: +zinit-prehelp-usage-message [[[

@@ -15,7 +15,7 @@ emulate -L zsh \
 EC+=$?
 
 # Set $0 with a new trik - use of %x prompt expansion
-0=${ZERO:-${(%):-%X}}
+0=${${ZERO:-${(%):-%x}}:A}
 [[ -f $0 ]];EC+=$?
 
 zmodload zsh/terminfo zsh/termcap zsh/system zsh/datetime
@@ -24,7 +24,7 @@ EC+=$?
 
 # Standard hash `Plugins` for plugins, to not pollute the namespace
 typeset -gA Plugins
-Plugins[ZINIT_DIR]="${0:h:h}"
+Plugins[ZINIT_DIR]=$0:h:h
 
 # Standard work variables
 typeset -g -a reply match mbegin mend
