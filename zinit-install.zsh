@@ -2517,6 +2517,42 @@ for its found {file}meson.build{pre} input file}:-because {flag}m{pre} \
         }
     }
 } # ]]]
+# FUNCTION: ∞zinit-stats-hook [[[
+∞zinit-stats-hook() {
+    emulate -L zsh -o extendedglob \
+                    -o warncreateglobal
+    [[ $ZINIT[NO_STATS] = (1|yes|true) ]]&&return
+    if [[ "$1" = plugin ]];then
+        local type="$1" user="$2" plugin="$3" id_as="$4" dir="${5#%}" hook="$6"
+    else
+        local type="$1" url="$2" id_as="$3" dir="${4#%}" hook="$5"
+    fi
+
+    [[ ! -e $dir ]]&&{+zinit-message {w} Plugin \
+        dir: {dir}$dir{rst} doesn\'t exist!
+        return 1
+    }
+    local PID=${${user:#%}:+$user/}$plugin
+    [[ $PID != $id_as ]]&&\
+        local QT="… (as: {pid}$id_as{rst})"||\
+        local QT=""
+    +zinit-message {nl}{hi}Plugin stats of: \
+        {pid}$PID{rst}$QT{nl}{bar}
+    local -U -a file=($dir/**/*~*/(.git|._zinit|._backup)(|/*)(DN))
+    local SIZE=${${:-"$(command du -sh $dir)"}%%[[:space:]]*}
+    +zinit-message {i} Number of files in the \
+        plugin dir: {num}$#file{nl}{i}\
+        Total space taken: {data}$SIZE
+    if [[ -d $dir/.git ]];then
+        local DATE="$(git -C "$dir" log -1 --pretty='format:%cd' --date=format:'%Y-%m-%d %H:%M:%S')"
+        local COUNT="$(git -C "$dir" rev-list --count --all)"
+
+        +zinit-message {i} Last commit has date:\
+            {time}$DATE
+        +zinit-message {i} Commit count is:\
+            {num}$COUNT
+    fi 
+} # ]]]
 # FUNCTION: ∞zinit-func-dyn-dir-hook [[[
 ∞zinit-func-dyn-dir-hook() {
     z4÷populate-dynamic-dir

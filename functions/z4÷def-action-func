@@ -44,6 +44,7 @@ z4÷def-action-func(){
                     ;;
                 (dispose)
                     zinit delete -y \$IDAS
+                    unfunction @$PID
                     ;;
                 (run|*)
                     [[ \$OP == run ]]&&OP=

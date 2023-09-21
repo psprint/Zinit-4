@@ -3312,6 +3312,7 @@ if [[ -e ${${ZINIT[BIN_DIR]}}/zmodules/Src/zdharma/zplugin.so ]] {
 # atclone-post.
 @zinit-register-hook "compile-plugin" hook:atclone-post ∞zinit-compile-plugin-hook
 @zinit-register-hook "func-and-dyn-dir" hook:atclone-post ∞zinit-func-dyn-dir-hook
+@zinit-register-hook "stats" hook:atclone-post ∞zinit-stats-hook
 
 # create so that for sure no warncreateglobal warning is issued
 typeset -g REPLY MATCH reply=() match=() mbegin=() mend=()
