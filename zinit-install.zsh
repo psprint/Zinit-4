@@ -466,16 +466,14 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
                 # Functions calls
                 "${arr[5]}" plugin "$user" "$plugin" "$id_as" "$local_path" "${${key##(zinit|z-annex) hook:}%% <->}" load
                 hook_rc=$?
-                [[ "$hook_rc" -ne 0 ]] && {
-                    # note: this will effectively return the last != 0 rc
-                    retval="$hook_rc"
-                    builtin print -Pr -- "${ZINIT[col-warn]}Warning:%f%b ${ZINIT[col-obj]}${arr[5]}${ZINIT[col-warn]} hook returned with ${ZINIT[col-obj]}${hook_rc}${ZINIT[col-rst]}"
+                [[ hook_rc -ne 0 ]] && {
+                    +zi-log {w} {func}${arr[5]}{warn} hook returned with {exitcd}$hook_rc
                 }
             done
 
         }
 
-        return "$retval"
+        return retval
     ) || return $?
 
     if [[ $update != -u ]] {
@@ -490,9 +488,8 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
             arr=( "${(Q)${(z@)ZINIT_EXTS[$key]:-$ZINIT_EXTS2[$key]}[@]}" )
             "${arr[5]}" plugin "$user" "$plugin" "$id_as" "$local_path" "${${key##(zinit|z-annex) hook:}%% <->}"
             hook_rc=$?
-            [[ "$hook_rc" -ne 0 ]] && {
-                retval="$hook_rc"
-                builtin print -Pr -- "${ZINIT[col-warn]}Warning:%f%b ${ZINIT[col-obj]}${arr[5]}${ZINIT[col-warn]} hook returned with ${ZINIT[col-obj]}${hook_rc}${ZINIT[col-rst]}"
+            [[ hook_rc -ne 0 ]] && {
+                +zi-log {w} {func}${arr[5]}{warn} hook returned with {exitcd}$hook_rc
             }
         done
     }
@@ -662,7 +659,7 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
     if [[ "$url" =~ ^file:// ]] {
         local filepath=${url##file://}
         <"$filepath"
-        return "$?"
+        return $?
     }
 
     if (( restart )) {
@@ -1933,7 +1930,7 @@ zpextract() {
     [[ $atpull == "%atclone" ]] && cmd="$atclone"
 
     eval "$cmd"
-    return "$?"
+    return $?
 } # ]]]
 # FUNCTION: .zinit-get-cygwin-package [[[
 .zinit-get-cygwin-package() {
@@ -2405,7 +2402,7 @@ for its found {file}meson.build{pre} input file}:-because {flag}m{pre} \
         () { setopt localoptions noautopushd; builtin cd -q "$___oldcd"; }
     }
 
-    return "$rc"
+    return rc
 } # ]]]
 # FUNCTION: ∞zinit-extract-hook [[[
 ∞zinit-extract-hook() {
@@ -2582,7 +2579,7 @@ for its found {file}meson.build{pre} input file}:-because {flag}m{pre} \
         () { setopt localoptions noautopushd; builtin cd -q "$___oldcd"; };
     }
 
-    return "$rc"
+    return rc
 } # ]]]
 # FUNCTION: ∞zinit-atpull-hook [[[
 ∞zinit-atpull-hook() {
@@ -2608,7 +2605,7 @@ for its found {file}meson.build{pre} input file}:-because {flag}m{pre} \
         () { setopt localoptions noautopushd; builtin cd -q "$___oldcd"; };
     }
 
-    return "$rc"
+    return rc
 } # ]]]
 # FUNCTION: ∞zinit-ps-on-update-hook [[[
 ∞zinit-ps-on-update-hook() {

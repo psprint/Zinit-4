@@ -32,6 +32,7 @@
     col-mmdsh $'\e[1;38;5;220m'"${${${(M)LANG:#*UTF-8*}:+――}:--}"$'\e[0m'
 
     col-↔     ${${${(M)LANG:#*UTF-8*}:+$'\e[38;5;82m↔\e[0m'}:-$'\e[38;5;82m«-»\e[0m'}
+    col-date $'\e[1;38;5;174m' col-exitcd $'\e[1;38;5;207m'
 )
 if [[ -z $SOURCED && ( $+terminfo -eq 1 && \
                         $terminfo[colors] -ge 256) || \

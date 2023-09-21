@@ -31,6 +31,7 @@
     col-mmdsh $'\e[1;38;5;220m'"${${${(M)LANG:#*UTF-8*}:+――}:--}"$'\e[0m'
 
     col-↔     ${${${(M)LANG:#*UTF-8*}:+$'\e[38;5;82m↔\e[0m'}:-$'\e[38;5;82m«-»\e[0m'}
+    col-date $'\e[1;38;5;51m' col-exitcd $'\e[1;38;5;205m'
 )
 
 # Conmditionally allow 256 color codes for base handlers
