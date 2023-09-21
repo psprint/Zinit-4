@@ -46,6 +46,7 @@ z4÷populate-dynamic-dir(){
         cfg   ${XDG_CONFIG_HOME:-$HOME/.config}
         cache ${XDG_CACHE_HOME:-$HOME/.cache}
         data  ${XDG_DATA_HOME:-$HOME/.local/share}
+        run   ${XDG_RUNTIME_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/$UID}
 
         # Z-Prefix's words
         zp          $ZPFX
