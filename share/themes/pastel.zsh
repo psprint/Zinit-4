@@ -33,6 +33,7 @@
 
     col-↔     ${${${(M)LANG:#*UTF-8*}:+$'\e[38;5;82m↔\e[0m'}:-$'\e[38;5;82m«-»\e[0m'}
     col-date $'\e[1;38;5;82m' col-exitcd $'\e[1;38;5;201m'
+    col-ref $'\e[1;38;5;208m' col-\$ $'\e[0m'
 )
 if [[ -z $SOURCED && ( $+terminfo -eq 1 && \
                         $terminfo[colors] -ge 256) || \
