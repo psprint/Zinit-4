@@ -47,6 +47,28 @@ z4÷uui-query-change-cb(){
     typeset -g in_query=$Q
     ZUI[cursor]=$#ZUI[SEARCH_BUFFER]+1
 }
+z4÷uui-save-screen(){
+    integer QNCOL=$1 QIDX=$ZUI[SAVE_FILE_IDX]
+    QIDX+=1
+    ZUI[SAVE_FILE_IDX]=$QIDX
+
+    # create file
+    local FNAME=z4_update_ui_save.$QIDX ITE
+    : >!$PWD/$FNAME
+
+    # populate it
+    if ((QNCOL));then
+        foreach ITE ("$coproc_output[@]")
+            z4÷prune-esc $ITE
+            builtin printf %s\\n $REPLY>>!$PWD/$FNAME
+        end
+        local BIT=" (no colors)"
+    else
+       builtin printf %s\\n "$coproc_output[@]">!$PWD/$FNAME
+    fi
+    iqw "" "Notice: " "saved $#coproc_output lines to: " \
+        ./$FNAME $BIT
+}
 z4÷uui-err-search(){
     ZUI[IN_QUERY]=$FLAG_SEARCH
     typeset -g in_query=$FLAG_SEARCH

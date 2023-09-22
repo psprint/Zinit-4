@@ -4,7 +4,15 @@
 # on the err-search action (Alt-Space)
 Z4_UPUI_ERROR_SEARCH="(error|fatal|warning)"
 
-zui::bindkey $'\C-_' z4÷uui-toggle-prompt  # Ctrl-/ - toggle search prompt
+# ctrl-/ - toggle search prompt
+zui::bindkey $'\C-_' z4÷uui-toggle-prompt
+# alt-/ - completion
 zui::bindkey $'\e/'  z4÷uui-complete
+# ctrl-space to/from error jumping
 zui::bindkey $'\C-@' z4÷uui-jump
-zui::bindkey $'\e '  z4÷uui-err-search  # search (error|fatal|warning)
+# alt-space - search (error|fatal|warning), configure above
+zui::bindkey $'\e '  z4÷uui-err-search
+# alt-s - save current screen to a file
+zui::bindkey $'\es'  '{z4÷uui-save-screen 0}'
+# alt-shift-s - save but with no colors
+zui::bindkey $'\eS'  '{z4÷uui-save-screen 1}'
