@@ -1,8 +1,10 @@
 #!/usr/bin/env zsh
 
+# The search regex to be set
+# on the err-search action (Alt-Space)
+Z4_UPUI_ERROR_SEARCH="(error|fatal|warning)"
+
 zui::bindkey $'\C-_' z4÷uui-toggle-prompt  # Ctrl-/ - toggle search prompt
 zui::bindkey $'\e/'  z4÷uui-complete
 zui::bindkey $'\C-@' z4÷uui-jump
-
-
-
+zui::bindkey $'\e '  z4÷uui-err-search  # search (error|fatal|warning)

@@ -41,6 +41,13 @@ z4÷uui-query-change-cb(){
     typeset -g in_query=$Q
     ZUI[cursor]=$#ZUI[SEARCH_BUFFER]+1
 }
+z4÷uui-err-search(){
+    ZUI[IN_QUERY]=$FLAG_SEARCH
+    typeset -g in_query=$FLAG_SEARCH
+    ZUI[SEARCH_BUFFER]=$Z4_UPUI_ERROR_SEARCH
+    typeset -g buffer=$Z4_UPUI_ERROR_SEARCH
+    ZUI[cursor]=$#ZUI[SEARCH_BUFFER]+1
+}
 
 ZUI[QUERY_CHANGE_CALLBACK]=z4÷uui-query-change-cb
 ZUI[key-timeout]=0.3
