@@ -23,7 +23,10 @@ iqerr iqw(){
 -zui_glib_store_default_app_config b:instant_search 1
 -zui_glib_store_default_app_config b:instant_select 1
 -zui_glib_store_default_app_config s:text_mode off
--zui_glib_store_default_app_config s:mark "white GREEN reverse bold"
+-zui_glib_store_default_app_config s:mark "yellow GREEN lineund reverse bold"
+-zui_glib_store_default_app_config s:mark2 "white BLUE lineund reverse bold"
+-zui_glib_store_default_app_config s:altmark "yellow GREEN reverse bold"
+-zui_glib_store_default_app_config s:altmark2 "white BLUE reverse bold"
 -zui_glib_store_default_app_config b:top_anchors 0
 -zui_glib_store_default_app_config b:border 1
 -zui_glib_store_default_app_config b:status_size 5
