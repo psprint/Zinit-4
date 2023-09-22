@@ -74,7 +74,7 @@ z4÷populate-dynamic-dir(){
     local -a tmp
     tmp=($ZINIT[SNIPPETS_DIR]/*[[:alnum:]_÷-]~*/(http(|s)|ftp(s|)|scp|file)--*(N.,/,@) $ZINIT[SNIPPETS_DIR]/(http(|s)|ftp(|s)|scp|file)--*/*[[:alnum:]_÷-](N.,/,@))
     : ${tmp[@]//(#b)(*)/${z4_zdn_top[${${${match[1]//(http(s|)|ftp(|s)|file|scp)--/proto://}//--//}:t}]::=$match[1]}}
-    : ${tmp[@]//(#b)(*)/${z4_zdn_zsnip_level1[${${${match[1]//(http(s|)|ftp(|s)|file|scp)--/proto://}//--//}:t}]::=$match[1]}}
+    : ${tmp[@]//(#b)(*)/${z4_zdn_zsnip_level1[${${${match[1]//(http(s|)|ftp(|s)|file|scp)--/proto://}//--//}:t}]::=${match[1]##$ZINIT[SNIPPETS_DIR]/#}}}
 
     tmp=($ZINIT[PLUGINS_DIR]/*[[:alnum:]](N.,/,@))
     : ${tmp[@]//(#b)(*)/${z4_zdn_top[${${match[1]:t}//---//}]::=$match[1]}}

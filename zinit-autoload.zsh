@@ -3015,7 +3015,7 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
                     [[ "$hook_rc" -ne 0 ]] && {
                         # note: this will effectively return the last != 0 rc
                         retval="$hook_rc"
-                        builtin print -Pr -- "${ZINIT[col-warn]}Warning:%f%b ${ZINIT[col-obj]}${arr[5]}${ZINIT[col-warn]} hook returned with ${ZINIT[col-obj]}${hook_rc}${ZINIT[col-rst]}"
+                        +zi-log {w} {obj}${arr[5]}{warn} hook returned with {obj}${hook_rc}
                     }
                 done
 
@@ -3102,17 +3102,18 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
                       [[ "$hook_rc" -ne 0 ]] && {
                           # note: this will effectively return the last != 0 rc
                           retval="$hook_rc"
-                          builtin print -Pr -- "${ZINIT[col-warn]}Warning:%f%b ${ZINIT[col-obj]}${arr[5]}${ZINIT[col-warn]} hook returned with ${ZINIT[col-obj]}${hook_rc}${ZINIT[col-rst]}"
+                          +zi-log {w} {obj}${arr[5]}{warn} hook returned with {obj}${hook_rc}
                       }
                   done
                   ICE=()
                   (( ZINIT[annex-multi-flag:pull-active] >= 2 )) && command git pull --no-stat --recurse-submodules  ${=ice[pullopts]:---ff-only} origin ${ice[ver]:-$main_branch} |& command grep -E -v '(FETCH_HEAD|up.to.date\.|From.*://)'
+                  ((pipestatus[1]))&&ZINIT[annex-multi-flag:pull-active]=7
               }
               return ${ZINIT[annex-multi-flag:pull-active]}
             )
             ZINIT[annex-multi-flag:pull-active]=$?
         }
-
+        ((ZINIT[annex-multi-flag:pull-active]==7))&&return 1
         if [[ $ZINIT[annex-multi-flag:pull-active] -le 1 && -d $local_dir/.git ]]; then
             (
                 builtin cd -q "$local_dir" # || return 1 - don't return, maybe it's some hook's logic
@@ -3149,7 +3150,7 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
                 [[ "$hook_rc" -ne 0 ]] && {
                     # note: this will effectively return the last != 0 rc
                     retval="$hook_rc"
-                    builtin print -Pr -- "${ZINIT[col-warn]}Warning:%f%b ${ZINIT[col-obj]}${arr[5]}${ZINIT[col-warn]} hook returned with ${ZINIT[col-obj]}${hook_rc}${ZINIT[col-rst]}"
+                    +zi-log {w} {obj}${arr[5]}{warn} hook returned with {obj}${hook_rc}
                 }
             done
 
