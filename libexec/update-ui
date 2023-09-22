@@ -49,9 +49,9 @@ demo_generator_A() {
     local mod="$1" ice="$2"
 
     reply=()
-    -zui_glib_rc_button "button1" "$ZUI[BOLD]${ZUI[GREEN]}Run zinit update --all${ZUI[FMT_END]}" 'internal=1; coproc 2>&1 zinit update --all; ustarted=1'
+    -zui_glib_rc_button "button1" "$ZUI[BOLD]${ZUI[GREEN]}RUN: zinit update --all${ZUI[FMT_END]}" 'internal=1; coproc 2>&1 zinit update --all; ustarted=1'
     -zui_glib_rc_button "button2" "$ZUI[BOLD]${ZUI[YELLOW]}Job status${ZUI[FMT_END]}" 'internal=1; get_zinit_update_pid'
-    -zui_glib_rc_button "button3" "$ZUI[BOLD]${ZUI[GREEN]}Run parallel zinit update${ZUI[FMT_END]}" 'internal=1; coproc 2>&1 zinit update --all -p; pstarted=1'
+    -zui_glib_rc_button "button3" "$ZUI[BOLD]${ZUI[MAGENTA]}RUN: zinit update --parallel${ZUI[FMT_END]}" 'internal=1; coproc 2>&1 zinit update --parallel; pstarted=1'
 
     # Content
     reply=( "" "${reply[1]} ${reply[2]} ${reply[3]}" )
@@ -63,7 +63,7 @@ demo_generator_A() {
 demo_generator_B() {
     reply=()
     -zui_glib_special_text "Below gathered is \`zinit update\` output"
-    -zui_glib_button "button4" "${ZUI[MAGENTA]}(clear)${ZUI[FMT_END]}" 'internal=1; coproc_output=( ); -zui_glib_fly_mod_regen 2 1'
+    -zui_glib_button "button4" "$ZUI[BOLD]${ZUI[BLUE]}(CLEAR)${ZUI[FMT_END]}" 'internal=1; coproc_output=(); -zui_glib_fly_mod_regen 2 1'
     -zui_glib_special_text "${(r:COLUMNS-2::—:)}"
     reply=( "$ZUI[BOLD]${ZUI[YELLOW]}${reply[1]}${ZUI[FMT_END]} ${reply[2]}" "$ZUI[BOLD]${ZUI[GREEN]}${reply[3]}${ZUI[FMT_END]}" "${coproc_output[@]}" )  reply2=( )  reply3=( 1 )  reply4=( )
 }

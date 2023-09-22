@@ -575,9 +575,23 @@ while (( 1 )); do
             __last_element="${#__list}"
 
             # Next do the filtering
-            local search_buffer="${ZUI[SEARCH_BUFFER]%%(+| )##}"
+            local search_buffer="${ZUI[SEARCH_BUFFER]%%[ ]##}"
+            local -A tmp=( + \#\# \* \# . \?
+                        \^ '(#s)' \$ '(#e)' )
+            integer QCNT_O=0 QCNT_C=0
             search_buffer="${search_buffer## ##}"
-            search_buffer="${search_buffer//(#m)[][*?|#~^()><\\]/\\$MATCH}"
+            repeat 2 {search_buffer="${search_buffer//(#b)(([^\\]|(#s))([\\][\\])#|(#s))([\+\*.\^\$])/$match[1]$tmp[$match[4]]}";}
+            search_buffer="${search_buffer//(#b)([\\]([\\][\\])#)([\+.\^\$])/$match[2]$match[3]}"
+            : ${search_buffer//(#b)(([^\\]|(#s))\()/$((QCNT_O++))}
+            : ${search_buffer//(#b)(([^\\]|(#s))\))/$((QCNT_C++))}
+            ((QCNT_O!=QCNT_C))&&search_buffer=
+            QCNT_O=0 QCNT_C=0
+            : ${search_buffer//(#b)(([^\\]|(#s))\[)/$((QCNT_O++))}
+            : ${search_buffer//(#b)(([^\\]|(#s))\])/$((QCNT_C++))}
+            ((QCNT_O!=QCNT_C))&&search_buffer=
+            [[ $search_buffer == \\ ]]&&search_buffer=
+
+            #search_buffer="${search_buffer//(#m)[][*?|#~^()><\\]/\\$MATCH}"
             local search_pattern=""
             local colsearch_pattern=""
             if [[ -n "$search_buffer" ]]; then
@@ -786,12 +800,12 @@ while (( 1 )); do
                     "" "$selectable" "${${ZUI[SEARCH_BUFFER]:+1}:-0}" \
                     $ZUI[USER_CURRENT_IDX] $ZUI[USER_LAST_ELEMENT]
 
-        if ((ZUI[IN_QUERY]==3));then
+        if ((ZUI[IN_QUERY]==FLAG_QUERY));then
             local color=blue
             ((ZUI[QUERY_PROMPT_RET]))&&color=red
             -zui_items_status_msg "$color" "·$ZUI[QUERY_PROMPT_RET]· " green "$ZUI[QUERY_PROMPT]" "$ZUI[QUERY_BUFFER]"
-        elif ((ZUI[IN_QUERY]==1)); then
-            -zui_items_status_msg cyan "$ZUI[QUERY_PROMPT]" "${ZUI[SEARCH_BUFFER]// /+}"
+        elif ((ZUI[IN_QUERY]==FLAG_SEARCH)); then
+            -zui_items_status_msg cyan "$ZUI[QUERY_PROMPT]" "${ZUI[SEARCH_BUFFER]// / }"
         fi
 
         [[ $ZUI[status_border] = 1 ]] && {
