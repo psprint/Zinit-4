@@ -30,6 +30,7 @@ iqerr iqw(){
 -zui_glib_store_default_app_config b:top_anchors 0
 -zui_glib_store_default_app_config b:border 1
 -zui_glib_store_default_app_config b:status_size 5
+-zui_glib_load_config b:bold 0 2 'ZUI[bold]'
 
 ZUI[start_tm]=$EPOCHREALTIME
 ZUI[UNIQ_MODE]=0
@@ -47,6 +48,7 @@ z4÷uui-query-change-cb(){
     typeset -g in_query=$Q
     ZUI[cursor]=$#ZUI[SEARCH_BUFFER]+1
 }
+z4÷uui-toggle-bold(){((ZUI[bold]=1-ZUI[bold]));}
 z4÷uui-save-screen(){
     integer QNCOL=$1 QIDX=$ZUI[SAVE_FILE_IDX]
     QIDX+=1
