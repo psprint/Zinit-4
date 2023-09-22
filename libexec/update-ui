@@ -19,16 +19,19 @@ iqerr iqw(){
     -zui_glib_msg "${@//\{[^\}]##\}/}"
 }
 
--zui_glib_store_default_app_config s:timeout 300
+-zui_glib_store_default_app_config s:timeout 131
 -zui_glib_store_default_app_config b:instant_search 1
 -zui_glib_store_default_app_config b:instant_select 1
 -zui_glib_store_default_app_config s:text_mode off
 -zui_glib_store_default_app_config s:mark "white BLUE reverse bold"
 -zui_glib_store_default_app_config b:top_anchors 0
 -zui_glib_store_default_app_config b:border 1
+-zui_glib_store_default_app_config b:status_size 5
 
 ZUI[start_tm]=$EPOCHREALTIME
-
+ZUI[UNIQ_MODE]=0
+ZUI[QUERY_CHANGE_CALLBACK]=z4÷uui-query-change-cb
+ZUI[key-timeout]=0.3
 typeset -a -g coproc_output
 local ustarted=0 pstarted=0  # denote if configure/make is running
 
@@ -44,13 +47,16 @@ z4÷uui-query-change-cb(){
 z4÷uui-err-search(){
     ZUI[IN_QUERY]=$FLAG_SEARCH
     typeset -g in_query=$FLAG_SEARCH
-    ZUI[SEARCH_BUFFER]=$Z4_UPUI_ERROR_SEARCH
-    typeset -g buffer=$Z4_UPUI_ERROR_SEARCH
+    if [[ $ZUI[SEARCH_BUFFER] == $Z4_UPUI_ERROR_SEARCH ]]
+    then
+        ZUI[SEARCH_BUFFER]= 
+        typeset -g buffer=
+    else
+        ZUI[SEARCH_BUFFER]=$Z4_UPUI_ERROR_SEARCH
+        typeset -g buffer=$Z4_UPUI_ERROR_SEARCH
+    fi
     ZUI[cursor]=$#ZUI[SEARCH_BUFFER]+1
 }
-
-ZUI[QUERY_CHANGE_CALLBACK]=z4÷uui-query-change-cb
-ZUI[key-timeout]=0.3
 
 demo_generator_A() {
     local mod="$1" ice="$2"
@@ -77,6 +83,11 @@ demo_generator_B() {
 
 # Read & publish configure/make output
 -zui-standard-timeout-callback() {
+    ((ZUI[start_tm]&&(EPOCHREALTIME-ZUI[start_tm])>0.1))&&\
+    {
+            ZUI[redraw]=1 ZUI[start_tm]=0
+            ((ZUI[CURRENT_IDX]<2))&&ZUI[CURRENT_IDX]=2
+    }
     (( pstarted + ustarted == 0 )) && return
 
     local line had_read=0
@@ -109,6 +120,13 @@ get_zinit_update_pid() {
     end
     return 1
 }
+
+iqw ""
+iqw "Welcome to the " "" "Z4 Update-UI" "" "!"
+iqw "Hint: Alt-Space is the quick-error search. " \
+    "" "Ctrl-Space jumps to/from errors. " \
+    "Ctrl-/ toggles search prompt. " \
+    "It supports regexes."
 
 ## Start application ##
 zui-event-loop 1:demo_generator_A 1:demo_generator_B

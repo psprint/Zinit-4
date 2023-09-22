@@ -2572,6 +2572,8 @@ zinit() {
         --reset    opt_-r,--reset
         -a         opt_-a,--all:"delete:[Delete {hi}all{rst} plugins and snippets.] update:[Update {b-lhi}all{rst} plugins and snippets.]"
         --all      opt_-a,--all
+        -U         opt_-U,--ui:"update:[Open TUI console that allows both sequential and parallel update with nice interface and quick error grepping on alt-space.]"
+        --ui       opt_-U,--ui
         -c         opt_-c,--clean:"Delete {b-lhi}only{rst} the {b-lhi}currently-not loaded{rst} plugins and snippets."
         --clean    opt_-c,--clean
         -y         opt_-y,--yes:"Automatically confirm any yes/no prompts."
@@ -2604,7 +2606,7 @@ zinit() {
         snippet       "--command|--force|--help|-f|-h|-x"
         times         "--help|-h|-m|-s"
         unload        "--help|--quiet|-h|-q"
-        update        "--all|--help|--no-pager|--parallel|--plugins|--quiet|--reset|--snippets|--urge|--verbose|-L|-a|-h|-n|-p|-q|-r|-s|-u|-v"
+        update        "--ui|--all|--help|--no-pager|--parallel|--plugins|--quiet|--reset|--snippets|--urge|--verbose|-U|-L|-a|-h|-n|-p|-q|-r|-s|-u|-v"
         version       ""
     )
 
@@ -2958,7 +2960,10 @@ You can try to prepend {apo}${___q}{lhi}@{apo}'{error} to the ID if the last ice
                     shift
                     .zinit-parse-opts update "$@"
                     builtin set -- "${reply[@]}"
-                    if [[ ${OPTS[opt_-a,--all]} -eq 1 || ${OPTS[opt_-p,--parallel]} -eq 1 || ${OPTS[opt_-s,--snippets]} -eq 1 || ${OPTS[opt_-l,--plugins]} -eq 1 || -z $1$2${ICE[teleid]}${ICE[id-as]} ]]; then
+                    if [[ ${OPTS[opt_-U,--ui]} -eq 1 ]];then
+                        command $ZINIT[BIN_DIR]/libexec/update-ui
+                        __retval=$?
+                    elif [[ ${OPTS[opt_-a,--all]} -eq 1 || ${OPTS[opt_-p,--parallel]} -eq 1 || ${OPTS[opt_-s,--snippets]} -eq 1 || ${OPTS[opt_-l,--plugins]} -eq 1 || -z $1$2${ICE[teleid]}${ICE[id-as]} ]]; then
                         [[ -z $1$2 && $(( OPTS[opt_-a,--all] + OPTS[opt_-p,--parallel] + OPTS[opt_-s,--snippets] + OPTS[opt_-l,--plugins] )) -eq 0 ]] && { builtin print -r -- "Assuming --all is passed"; sleep 3; }
                         (( OPTS[opt_-p,--parallel] )) && OPTS[value]=${1:-15}
                         .zinit-update-or-status-all update; ___retval=$?
