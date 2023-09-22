@@ -103,6 +103,7 @@ function -zui_glib_init2() {
         ZUI[message_count]=0
         ZUI[messages_app]="${ZUI[app]}"
     }
+    readonly -g FLAG_NONE=0 FLAG_SEARCH=1 FLAG_QUERY=3
 } # }}}
 
 # FUNCTION: -zui_glib_special_text {{{

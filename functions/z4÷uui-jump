@@ -1,0 +1,53 @@
+#!/usr/bin/env zsh
+# Copyright (c) 2023 Sebastian Gniazdowski
+#
+#
+
+z4÷uui-jump(){
+    0=${${ZERO:-${(%):-%x}}:A}
+    integer QEC QI QTMP
+    [[ -f $0 ]];QEC+=$?
+    zi÷reset
+    source "$0:h:h"/share/preamble.inc.zsh||return 1
+
+    # Options and arguments
+    local -A Opts; local -a opts
+    {
+    zi÷parse-opts "" Opts opts "$@"||\
+        THROW "wrong options in $0:t func"
+    } always {
+        CATCH \*&&{iqw Error:\  "$CAUGHT[@]";return 80;}
+    }
+    set -- "$reply[@]"
+    zi÷opt-cascade Opts
+    QEC+=$?
+    zi÷reset
+
+    if ((!in_query)); then
+        if [[ -n $ZUI[PREV_SBUFFER] && $ZUI[PREV_SIDX] -gt 0 ]]; then
+            ZUI[SEARCH_BUFFER]=$ZUI[PREV_SBUFFER] buffer=$ZUI[PREV_SBUFFER]
+            ZUI[CURRENT_IDX]=$ZUI[PREV_SIDX] current_idx=$ZUI[PREV_SIDX]
+        fi
+        ZUI[IN_QUERY]=$FLAG_SEARCH in_query=$FLAG_SEARCH
+    else
+        repeat 1; do
+            typeset +U -ga __slist=("$__qlist[@]")
+        done
+        ZUI[PREV_SBUFFER]=$ZUI[SEARCH_BUFFER]
+        ZUI[PREV_SIDX]=$ZUI[CURRENT_IDX]
+        if -zui_sys_get_match_line QI; then
+            QTMP=$#ZUILIST_NONSELECTABLE_ELEMENTS
+            ZUI[CURRENT_IDX]=$((QI+QTMP)) current_idx=QI+QTMP
+            -zui_glib_msg "Search: \`${ZUI[SEARCH_BUFFER]}' jumped to line "\
+                 "#$QI" " Restore search via Ctrl-Space"
+            ZUI[SEARCH_BUFFER]="" buffer=""
+            ZUI[IN_QUERY]=$FLAG_NONE in_query=$FLAG_NONE
+            ZUI[highlight_once]="italic"
+        fi
+        ZUI[IGNORE_MSG]=1
+    fi
+
+    return $((!QI))
+}
+
+# vim:ft=zsh

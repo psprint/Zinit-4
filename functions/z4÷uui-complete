@@ -1,0 +1,83 @@
+#!/usr/bin/env zsh
+# Copyright (c) 2023 Sebastian Gniazdowski
+#
+# ok/qgethr
+#
+
+z4÷uui-complete() {
+    local QE
+    integer EC QEC
+    0=${${ZERO:-${(%):-%x}}:A}
+    [[ -f $0 ]];EC+=$?
+    zi÷reset
+    source "$0:h:h"/share/preamble.inc.zsh
+
+    # Options and arguments
+    local -A Opts; local -a opts toutop
+    {
+    zi÷parse-opts "d w" Opts opts "$@"||\
+        {THROW "wrong options in" "{func}$0:t{\$} func";}
+    } always {
+        if CATCH \*;then
+            iqw Error:\  "$CAUGHT[@]"
+            return EC+17
+        fi
+    }
+    set -- "$reply[@]"
+    zi÷opt-cascade Opts
+    EC+=$?
+    zi÷reset
+
+    local QUE
+    integer TPE
+    if [[ -n $1 ]];then
+        QUE=$1
+    elif ! z4÷ui-get-set-buf GET;then
+        return 1
+    fi
+    QUE=${ZUI[COMP_BUFFER]::=$REPLY} ZUI[COMP_CURS]=$ZUI[cursor]
+
+    zi÷process-buffer "$QUE" $((ZUI[cursor]-1))||\
+        {iqerr "Error:" " couldn't process buffer";return 1;}
+    local WORD=$ZINIT_PB_WORDS[ZINIT_PB_SELECTED_WORD] BE=$ZINIT_PB_LEFT NXT=$ZINIT_PB_RIGHT
+    local PT=$BE\*$NXT
+    local -a QFIN
+    if (($+Opts[-d]||!($+Opts[-d]||$+Opts[-w])));then
+        QFIN=(*~(*\~|*(/|).git(/*|))(N,.,/,@,D)
+              */*~(*\~|*(/|).git(/*|))(N,.,/,@,D)
+              */*/*~(*\~|*(/|).git(/*|))(N,.,/,@,D))
+    fi
+    if (($+Opts[-w]||!($+Opts[-d]||$+Opts[-w])));then
+        local -a qt
+        integer QCNT
+        foreach QE ($coproc_output)
+            QCNT+=1
+            z4÷prune-esc -v "qt[$QCNT]" -- $QE 
+            if ((QCNT>=79));then
+                QFIN+=(${=${(j: :)${qt[@]}}})
+                QCNT=0
+            fi
+        end
+        ((QCNT>0&&QCNT<79))&&QFIN+=(${=${(j: :)${(@)qt[1,QCNT]}}})
+    fi
+
+    QFIN=(${(M)QFIN:#(*/|)$BE*$NXT})
+    QFIN=(${(o)QFIN%/})
+    typeset -U QFIN
+
+    if ! zui::item-box -w 27 -s 1 -i cpl -- $QFIN;then
+        z4÷ui-get-set-buf WRITE $ZUI[COMP_BUFFER]
+        ZUI[cursor]=$ZUI[COMP_CURS]
+        iqw "Notice: " "completion cancelled"
+        return 1
+    fi
+    if zi÷build-buffer "$ZUI[BOX_VALUE]" $((ZUI[cursor]-1));then
+        z4÷ui-get-set-buf WRITE $reply[1]||return 1
+        ZUI[cursor]=$((reply[2]+1))
+    fi
+
+    [[ -n $reply[1] ]]
+    EC+=$(($?))
+    return EC
+}
+# vim:ft=zsh

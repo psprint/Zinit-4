@@ -112,13 +112,13 @@ trap "REPLY=-2; reply=(); return 1" TERM INT QUIT
       ZUI[BFIX_CURRENT_IDX]=$ZUI[CURRENT_IDX] ZUI[CURRENT_IDX]="$__last_element"\
          ZUI[1_CURRENT_IDX]="$__last_element"
 
-    if ((ZUI[CURRENT_IDX]<4));then
-        if ((!$#ZUI[SEARCH_BUFFER]&&!ZUI[UNIQ_MODE]));then
-            ((__last_element>=4))&&{ZUI[CURRENT_IDX]=4;}
-        else
-            ((ZUI[CURRENT_IDX]<1))&&{ZUI[CURRENT_IDX]=1;}
-        fi
-    fi
+#    if ((ZUI[CURRENT_IDX]<4));then
+#        if ((!$#ZUI[SEARCH_BUFFER]&&!ZUI[UNIQ_MODE]));then
+#            ((__last_element>=4))&&{ZUI[CURRENT_IDX]=4;}
+#        else
+#            ((ZUI[CURRENT_IDX]<1))&&{ZUI[CURRENT_IDX]=1;}
+#        fi
+#    fi
 
     [[ $ZUI[IO_COUNT] -eq 0 && $ZUI[1_CURRENT_IDX] -eq $ZUI[CURRENT_IDX] &&\
         $ZUI[BFIX_CURRENT_IDX] -gt 0 &&\

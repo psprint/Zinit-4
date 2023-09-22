@@ -207,7 +207,6 @@ ZINIT_2MAP=(
 zmodload zsh/zutil || { builtin print -P "%F{196}zsh/zutil module is required, aborting Zinit set up.%f"; return 1; }
 zmodload zsh/parameter || { builtin print -P "%F{196}zsh/parameter module is required, aborting Zinit set up.%f"; return 1; }
 zmodload zsh/term{cap,info} 2>/dev/null
-autoload -Uz colors && colors
 
 if [[ -z $SOURCED && ( $+terminfo -eq 1 && -n $terminfo[colors] ) || \
       ( $+termcap -eq 1 && -n $termcap[Co] )

@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+z4÷ui-get-set-buf(){
+    local NVL=$2 KEY QFLAG=$ZUI[IN_QUERY]
+    local -A Q=($FLAG_SEARCH SEARCH_BUFFER $FLAG_QUERY QUERY_BUFFER $FLAG_NONE VOID_BUFFER)
+    KEY=$Q[$QFLAG] REPLY=
+    if [[ -z $KEY ]];then
+        +zi-log {e} incoherent prompt state: {data}$QFLAG
+        return 1
+    fi
+    if [[ $1 == GET ]];then
+        REPLY=$ZUI[$KEY]
+    else
+        ZUI[$KEY]=$NVL;buffer=$NVL
+    fi
+    return 0
+}

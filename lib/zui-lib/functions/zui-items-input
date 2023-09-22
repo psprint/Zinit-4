@@ -229,7 +229,9 @@ setopt typesetsilent extendedglob
 }
 
 zui::toggle-prompt(){
-    ((in_query==1))&&in_query=3||in_query=1
+    ((in_query==FLAG_NONE))&&\
+        in_query=FLAG_SEARCH||\
+        in_query=FLAG_NONE
     [[ -n $ZUI[QUERY_CHANGE_CALLBACK] ]]&&\
         eval $ZUI[QUERY_CHANGE_CALLBACK] $in_query
     -zui_items_cursor_visibility status 1
@@ -664,7 +666,7 @@ case "$key" in
                             $from_what_idx_items_is_shown \
                             $page_height $page_width $last_element \
                             "$nseg" "$hscroll" ENTER 0 \
-                            "$buffer" "$uniq_mode" "$disable_search" \
+                            "$buffer" "$uniq_mode" "$disable_search" "__list"
             return $?
         else
             in_query=0

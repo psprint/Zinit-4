@@ -4,26 +4,27 @@
 # ok/qnstr – …normalize…str
 #
 
-zui::item-box() {
-
-    0=${${${(M)${0::=${(%):-%x}}:#/*}:-$PWD/$0}:A}
-
-    integer EC;[[ -f $0 ]];EC+=$?
+zui::item-box(){
+    integer QEC
+    0=${${ZERO:-${(%):-%x}}:A}
+    [[ -f $0 ]];QEC+=$?
+    zi÷reset
+    source "$0:h:h:h:h"/share/preamble.inc.zsh||return 1
 
     # Options and arguments
     local QE
     local -A Opts; local -a opts ws p
     {
-  int/nc::parse-opts "w: -width: s: -start: c: -code: o: -out:" Opts opts "$@"||\
-        THROW "incorrect options given to:" zui::item-box
+  zi÷parse-opts "-id: i: w: -width: s: -start: c: -code: o: -out:" Opts opts "$@"||\
+        THROW "wrong options in " $0:t " func"
     } always {
-        CATCH \*&&{iqerr "$CAUGHT[@]";return 39;}
+        CATCH \*&&{iqw "$CAUGHT[@]";return 82;}
     }
     set -- "$reply[@]"
-    int/nc::opt-cascade Opts -w --width -s --start -c --code --out -o
-    EC+=$?
-    int/nc::reset
-    local PFX="_ZUI_${RANDOM}_" SNIP
+    zi÷opt-cascade Opts -w --width -s --start -c --code --out -o -i --id
+    QEC+=$?
+    zi÷reset
+    local PFX="_ZUI_${Opts[-i]:-$RANDOM}_" SNIP
 
     noglob local VARW=ZUI[${PFX}width] VARI=ZUI[${PFX}idx] VARO=ZUI[${PFX}opts]
     : ${(P)VARW::=${Opts[-w]:-27}} ${(P)VARI::=${Opts[-s]:-1}}\
@@ -46,7 +47,7 @@ zui::item-box() {
         "$y_pos" $((min_x+6)) "$p[@]";then
         return 1
     fi
-    EC+=$?
+    QEC+=$?
     zcurses touch "$__wname_main"
     ZUI[REGENERATE_LIST]=2 #regenerate only display list
     local id=$p[1] || local id="-"
@@ -59,7 +60,6 @@ zui::item-box() {
             "${ZUI[$id]}" "${p[@]}"
         fi
     fi
-    return $?+EC
+    return $?
 }
-zui::item-box "$@"
 # vim:ft=zsh

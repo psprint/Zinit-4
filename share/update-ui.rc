@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+zui::bindkey $'\C-_' z4÷uui-toggle-prompt  # Ctrl-/ - toggle search prompt
+zui::bindkey $'\e/'  z4÷uui-complete
+zui::bindkey $'\C-@' z4÷uui-jump
+
+
+

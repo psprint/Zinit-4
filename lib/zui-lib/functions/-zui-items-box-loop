@@ -21,6 +21,7 @@ integer width=7 height=10 size="${#options}"
 for txt in "${options[@]}"; do
     (( width = ${(m)#txt} > width ? ${(m)#txt} : width ))
 done
+(( width = width>__page_width-10 ? __page_width-10:width ))
 
 if (( __ypos + size + 2 > __page_height + 1 )); then
     if (( size + 2 > __page_height + 1 )); then
@@ -140,6 +141,6 @@ done
 
 zcurses delwin lbox 2>/dev/null
 
-return $return_val
+return return_val
 
 # vim:ft=zsh
