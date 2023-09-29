@@ -28,6 +28,7 @@ z4÷def-action-func(){
                     \${OP:-cd} -- ${(qqq)TMP_PATH}
                     ;;
                 (load)
+                    +zi-log Loading {pid}\$IDAS{rst}…
                     local -A ICE
                     .zinit-load-ices \$IDAS
                     foreach ICE ICEV (\"\${(@kv)ICE}\")
@@ -37,12 +38,18 @@ z4÷def-action-func(){
                     zinit \"\$icest[@]\" for @\$IDAS
                     ;;
                 (unload)
+                    +zi-log Running {meta}zinit unload \
+                        {pid}\$IDAS{rst}…
                     zinit unload \$IDAS \"\$pos[@]\"
                     ;;
                 (update|status)
+                    +zi-log Running {meta}zinit update \
+                        {pid}\$IDAS{rst}…
                     zinit \$OP \$IDAS \"\$pos[@]\"
                     ;;
                 (dispose)
+                    +zi-log Running {meta}zinit delete \
+                        {opt}-y {pid}\$IDAS{rst}…
                     zinit delete -y \$IDAS
                     unfunction @$PID
                     ;;
