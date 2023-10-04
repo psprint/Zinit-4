@@ -61,7 +61,7 @@ z4÷uui-save-screen(){
     # populate it
     if ((QNCOL));then
         foreach ITE ("$coproc_output[@]")
-            z4÷prune-esc $ITE
+            z4÷prune-esc -- $ITE
             builtin printf %s\\n $REPLY>>!$PWD/$FNAME
         end
         local BIT=" (no colors)"
@@ -121,7 +121,7 @@ demo_generator_B() {
     repeat 20; do
         read -r -p -t 0 line 2>/dev/null && { 
             had_read=1
-            z4÷colreduce "$line"
+            z4÷colreduce -- "$line"
             coproc_output+=("$REPLY")
         } || break
     done
