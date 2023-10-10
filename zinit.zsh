@@ -2544,7 +2544,7 @@ $match[7]}:-${ZINIT[__last-formatter-code]}}}:+}}}//←→}
 # FUNCTION: zinit [[[
 # Entrypoint function directly exposed to user, consumes subcommands with respective arguments,
 # and completion.
-zinit() {
+zinit4() {
     local -A ICE ZINIT_ICE
     ICE=( "${(kv)ZINIT_ICES[@]}" )
     ZINIT_ICE=( "${(kv)ICE[@]}" )
@@ -3210,8 +3210,7 @@ zpcompdef() {
  
 # code [[[
 if [[ -z $ZINIT[NO_ALIASES] ]]; then
-    builtin alias zi=zinit
-    builtin alias z4=zinit zinit4=zinit
+    builtin alias zi=zinit4 z4=zinit4 zinit=zinit4
 fi
 
 (( ZINIT[ALIASES_OPT] )) && builtin setopt aliases
