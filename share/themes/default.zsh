@@ -13,7 +13,7 @@
     col-bar     $'\e[38;5;82m'          col-id-as   $'\e[4;38;5;220m'       col-num     $'\e[3;38;5;155m'    col-time    $'\e[38;5;220m'
          col-info    $'\e[38;5;82m'          col-obj     $'\e[38;5;218m'
     col-bspc    $'\b'                   col-info2   $'\e[38;5;227m'         col-obj2    $'\e[38;5;118m'      col-u       $'\e[4m'
-    col-cmd     $'\e[38;5;82m'          col-info3   $'\e[1m\e[38;5;227m'    col-ok      $'\e[38;5;220m'      col-u-warn  $'\e[4;38;5;214m'
+    col-cmd     $'\e[1;3;38;5;82m'          col-info3   $'\e[1m\e[38;5;227m'    col-ok      $'\e[38;5;220m'      col-u-warn  $'\e[4;38;5;214m'
     col-data    $'\e[38;5;82m'          col-it      $'\e[3m'                col-opt     $'\e[38;5;219m'      col-uname   $'\e[1;4m\e[35m'
     col-data2   $'\e[38;5;117m'         col-keyword $'\e[32m'               col-p       $'\e[38;5;81m'
     col-dir     $'\e[3;38;5;153m'       col-lhi     $'\e[38;5;81m'          col-pkg     $'\e[1;3;38;5;27m'   col-url     $'\e[38;5;75m'
@@ -33,6 +33,7 @@
     col-↔     ${${${(M)LANG:#*UTF-8*}:+$'\e[38;5;82m↔\e[0m'}:-$'\e[38;5;82m«-»\e[0m'}
     col-date $'\e[1;38;5;51m' col-exitcd $'\e[1;38;5;205m'
     col-ref $'\e[1;38;5;207m' col-\$ $'\e[0m'
+    col-param $'\e[1;38;5;140m'
 )
 
 # Conmditionally allow 256 color codes for base handlers
@@ -41,7 +42,7 @@ if [[ -z $SOURCED && ( $+terminfo -eq 1 && \
       ( $+termcap -eq 1 && $termcap[Co] -ge 256 ) ]]
 then
 
-    ZINIT+=( col-pname $'\e[1;4;38;5;39m' col-uname  $'\e[1;4;38;5;207m' )
+    ZINIT+=( col-pname $'\e[1;4;38;5;39;3m' col-uname  $'\e[1;4;38;5;207m' )
 fi
 
 # vim: ft=zsh sw=4 ts=4 et foldmarker=[[[,]]] foldmethod=marker

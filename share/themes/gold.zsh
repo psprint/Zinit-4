@@ -34,12 +34,13 @@
     col-↔     ${${${(M)LANG:#*UTF-8*}:+$'\e[38;5;82m↔\e[0m'}:-$'\e[38;5;82m«-»\e[0m'}
     col-date $'\e[1;38;5;174m' col-exitcd $'\e[1;38;5;207m'
     col-ref $'\e[1;38;5;174m' col-\$ $'\e[0m'
+    col-param $'\e[1;38;5;14m'
 )
 if [[ -z $SOURCED && ( $+terminfo -eq 1 && \
                         $terminfo[colors] -ge 256) || \
       ( $+termcap -eq 1 && $termcap[Co] -ge 256 ) ]]
 then
-    ZINIT+=( col-pname $'\e[1;4;38;5;178m' col-uname  $'\e[1;4;38;5;220m' )
+    ZINIT+=( col-pname $'\e[1;4;38;5;178;3m' col-uname  $'\e[1;4;38;5;220m' )
 fi
 
 # vim: ft=zsh sw=4 ts=4 et foldmarker=[[[,]]] foldmethod=marker

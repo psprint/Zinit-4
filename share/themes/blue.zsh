@@ -14,7 +14,7 @@
     col-bar     $'\e[38;5;33m'          col-id-as   $'\e[4;38;5;33m'       col-num     $'\e[3;38;5;39m'    col-time    $'\e[38;5;27m'
          col-info    $'\e[38;5;82m'          col-obj     $'\e[38;5;27m'
     col-bspc    $'\b'                   col-info2   $'\e[38;5;39m'         col-obj2    $'\e[38;5;33m'      col-u       $'\e[4m'
-    col-cmd     $'\e[38;5;45m'          col-info3   $'\e[1m\e[38;5;69m'    col-ok      $'\e[38;5;220m'      col-u-warn  $'\e[4;38;5;214m'
+    col-cmd     $'\e[1;3;38;5;45m'          col-info3   $'\e[1m\e[38;5;69m'    col-ok      $'\e[38;5;220m'      col-u-warn  $'\e[4;38;5;214m'
     col-data    $'\e[38;5;69m'          col-it      $'\e[3m'                col-opt     $'\e[38;5;219m'      col-uname   $'\e[1;4m\e[33m'
     col-data2   $'\e[38;5;45m'         col-keyword $'\e[1;38;5;174m'               col-p       $'\e[236;5;69m'
     col-dir     $'\e[3;38;5;69m'       col-lhi     $'\e[38;5;81m'          col-pkg     $'\e[1;3;38;5;27m'   col-url     $'\e[38;5;27m'
@@ -34,12 +34,13 @@
     col-↔     ${${${(M)LANG:#*UTF-8*}:+$'\e[38;5;82m↔\e[0m'}:-$'\e[38;5;82m«-»\e[0m'}
     col-date $'\e[1;38;5;69m' col-exitcd $'\e[1;38;5;208m'
     col-ref $'\e[1;38;5;30m' col-\$ $'\e[0m'
+    col-param $'\e[1;38;5;84m'
 )
 if [[ -z $SOURCED && ( $+terminfo -eq 1 && \
                         $terminfo[colors] -ge 256) || \
       ( $+termcap -eq 1 && $termcap[Co] -ge 256 ) ]]
 then
-    ZINIT+=( col-pname $'\e[1;4;38;5;28m' col-uname  $'\e[1;4;38;5;57m' )
+    ZINIT+=( col-pname $'\e[1;4;38;5;69;3m' col-uname  $'\e[1;4;38;5;57m' )
 fi
 
 # vim: ft=zsh sw=4 ts=4 et foldmarker=[[[,]]] foldmethod=marker
