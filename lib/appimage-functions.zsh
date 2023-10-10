@@ -166,6 +166,9 @@ if [[ ! -f $NFILE ]];then
     return 1
 fi
 builtin source ${(qqq)NFILE}
+typeset -g -A _comps
+_comps[zinit4]=_zinit4
+autoload -Uz _zinit4
 END
 
 }

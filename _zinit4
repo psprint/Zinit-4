@@ -1,4 +1,4 @@
-#compdef zinit
+#compdef zinit4
 #autoload
 #
 # Zinit ZSH completion function
@@ -338,7 +338,7 @@ _zinit_load() {
 } # ]]]
 
 # FUNCTION: _zinit [[[
-_zinit(){
+_zinit4(){
   local curcontext="$curcontext" state state_descr line expl
   local tmp ret=1
   _arguments -A \
@@ -365,6 +365,6 @@ _zinit(){
   _describe -t commands 'commands' _zinit_debug_commands "$@"
 }
 
-_zinit "$@"
+_zinit4 "$@"
 
 #vim: filetype=zsh foldmarker=[[[,]]] foldmethod=marker shiftwidth=2 softtabstop=2 tabstop=2:

@@ -1257,7 +1257,7 @@ builtin setopt noaliases
         command rm -rf "${ZINIT[PLUGINS_DIR]:-${TMPDIR:-/tmp}/132bcaCAB}/_local---zplugin"
         command mkdir -p "${ZINIT[PLUGINS_DIR]}/_local---zinit"
         command chmod go-w "${ZINIT[PLUGINS_DIR]}"
-        command ln -s "${ZINIT[BIN_DIR]}/_zinit" "${ZINIT[PLUGINS_DIR]}/_local---zinit"
+        command ln -s "${ZINIT[BIN_DIR]}/_zinit4" "${ZINIT[PLUGINS_DIR]}/_local---zinit"
 
         # Also set up */bin and ZPFX in general.
         command mkdir 2>/dev/null -p $ZPFX/bin $ZPFX/share
@@ -1273,7 +1273,7 @@ builtin setopt noaliases
         command chmod go-w "${ZINIT[COMPLETIONS_DIR]}"
 
         # Symlink _zinit completion into _local---zinit directory.
-        command ln -s "${ZINIT[PLUGINS_DIR]}/_local---zinit/_zinit" "${ZINIT[COMPLETIONS_DIR]}"
+        command ln -s "${ZINIT[PLUGINS_DIR]}/_local---zinit/_zinit4" "${ZINIT[COMPLETIONS_DIR]}"
 
         # Also set up */bin and ZPFX in general.
         command mkdir 2>/dev/null -p $ZPFX/bin $ZPFX/share
@@ -1298,8 +1298,8 @@ builtin setopt noaliases
         command mkdir 2>/dev/null -p ${~ZINIT[MAN_DIR]}/man{1..9}
     }
     # Copy Zinit manpage so that man is able to find it
-    [[ ! -f $ZINIT[MAN_DIR]/man1/zinit.1 || \
-        $ZINIT[MAN_DIR]/man1/zinit.1 -ot $ZINIT[BIN_DIR]/doc/zinit.1 ]] && {
+    [[ -f $ZINIT[BIN_DIR]/doc/zinit.1 && (! -f $ZINIT[MAN_DIR]/man1/zinit.1 || \
+        $ZINIT[MAN_DIR]/man1/zinit.1 -ot $ZINIT[BIN_DIR]/doc/zinit.1) ]] && {
         command mkdir -p $ZINIT[MAN_DIR]/man1
         command cp -f $ZINIT[BIN_DIR]/doc/zinit.1 $ZINIT[MAN_DIR]/man1
     }
