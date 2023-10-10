@@ -1637,7 +1637,16 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
             # Must be last
             svn
     )
-    .zinit-compute-ice "$1${${1:#(%|/)*}:+${2:+/}}$2" "pack" \
+    local -A Opts;local -a opts
+    zi÷parse-opts "p -print" Opts opts "$@"||\
+        {+zi-log {e} "wrong option, exiting…"
+        return 7;}
+    set -- "$reply[@]"
+    zi÷opt-cascade Opts -p --print
+    zi÷reset
+
+    local PID="$1${${1:#(%|/)*}:+${2:+/}}$2"
+    .zinit-compute-ice "$PID" "pack" \
         ice local_dir filename is_snippet || return 1
 
     [[ -e $local_dir ]] && {
@@ -1651,11 +1660,30 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
                 output+=( "$el" )
             }
         }
-
-        if [[ ${#output} = 0 ]]; then
-            builtin print -zr "# No Ice modifiers"
+        local OP CPID HIGH RST
+        if ((!$+Opts[-p]));then
+            OP=-zr
+            CPID=$PID
         else
-            builtin print -zr "zinit ice ${output[*]}; zinit "
+            OP=-P
+            CPID=%B%F{27}$PID%b%f
+            HIGH=$'\e[1;38;5;117m'
+            RST=$'\e[0m'
+        fi
+        if [[ ${#output} = 0 ]]; then
+            builtin print $OP -- \
+                \# No Ices found \
+                for: $CPID…
+        else
+            builtin print $OP -- "
+# Below are last used ices of: $CPID, \
+gathered from disk:
+# Append \`${HIGH}update${RST}\` or \
+\`${HIGH}load${RST}\`, etc. as z4 sub-command…
+# Hint: \`${HIGH}update${RST}\` \
+saves them to disk - if you modify them.
+
+z4 ice ${output[*]}; zinit "
         fi
         +zinit-deploy-message @rst
     } || builtin print -r -- "No such plugin or snippet"

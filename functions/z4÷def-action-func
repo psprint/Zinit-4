@@ -53,6 +53,12 @@ z4÷def-action-func(){
                     zinit delete -y \$IDAS
                     unfunction @$PID
                     ;;
+                (get-ice)
+                    +zi-log {i} Running: \
+                {cmd}zinit4 {param}recall \
+                \${pos:+\{opt\}\$pos} {pid}$PID
+                zinit4 recall \$pos $PID
+                    ;;
                 (run|*)
                     [[ \$OP == run ]]&&OP=
                     (
