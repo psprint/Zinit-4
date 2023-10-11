@@ -95,7 +95,7 @@ __zinit_installed_plugins(){
   local expl
   list=( "${ZINIT[PLUGINS_DIR]}"/*(N:t) )
   list=( "${list[@]//---//}" )
-  list=( "${list[@]:#_local/zinit}" )
+  list=( "${list[@]:#_local/zinit4}" )
   list=( "${list[@]:#custom}" )
   _wanted list expl 'plugins' compadd -a - list
 } # ]]]

@@ -1253,11 +1253,12 @@ builtin setopt noaliases
         # Also set up */bin and ZPFX in general.
         command mkdir 2>/dev/null -p $ZPFX/bin $ZPFX/share
     }
-    [[ ! -d ${ZINIT[PLUGINS_DIR]}/_local---zinit ]] && {
+    [[ ! -d ${ZINIT[PLUGINS_DIR]}/_local---zinit4 ]] && {
         command rm -rf "${ZINIT[PLUGINS_DIR]:-${TMPDIR:-/tmp}/132bcaCAB}/_local---zplugin"
-        command mkdir -p "${ZINIT[PLUGINS_DIR]}/_local---zinit"
+        command mkdir -p "${ZINIT[PLUGINS_DIR]}/_local---zinit4"
         command chmod go-w "${ZINIT[PLUGINS_DIR]}"
-        command ln -s "${ZINIT[BIN_DIR]}/_zinit4" "${ZINIT[PLUGINS_DIR]}/_local---zinit"
+        command ln -sf "${ZINIT[BIN_DIR]}/_zinit4" "${ZINIT[PLUGINS_DIR]}/_local---zinit4"
+        command ln -sf "${ZINIT[PLUGINS_DIR]}/_local---zinit4/_zinit4" ${ZINIT[COMPLETIONS_DIR]}
 
         # Also set up */bin and ZPFX in general.
         command mkdir 2>/dev/null -p $ZPFX/bin $ZPFX/share
@@ -1272,8 +1273,8 @@ builtin setopt noaliases
         # For compaudit.
         command chmod go-w "${ZINIT[COMPLETIONS_DIR]}"
 
-        # Symlink _zinit completion into _local---zinit directory.
-        command ln -s "${ZINIT[PLUGINS_DIR]}/_local---zinit/_zinit4" "${ZINIT[COMPLETIONS_DIR]}"
+        # Symlink _zinit completion into _local---zinit4 directory.
+        command ln -sf "${ZINIT[PLUGINS_DIR]}/_local---zinit4/_zinit4" "${ZINIT[COMPLETIONS_DIR]}"
 
         # Also set up */bin and ZPFX in general.
         command mkdir 2>/dev/null -p $ZPFX/bin $ZPFX/share
@@ -3238,9 +3239,9 @@ for ZINIT_TMP ( "" -side -install -autoload ) {
     .zinit-get-mtime-into "${ZINIT[BIN_DIR]}/zinit$ZINIT_TMP.zsh" "ZINIT[mtime$ZINIT_TMP]"
 }
 
-# Simulate existence of _local/zinit plugin (enables cuninstall of related completions)
-ZINIT_REGISTERED_PLUGINS=( _local/zinit "${(u)ZINIT_REGISTERED_PLUGINS[@]:#_local/zinit}" )
-ZINIT[STATES___local/zinit]=1
+# Simulate existence of _local/zinit4 plugin (enables cuninstall of related completions)
+ZINIT_REGISTERED_PLUGINS=( _local/zinit4 "${(u)ZINIT_REGISTERED_PLUGINS[@]:#_local/zinit4}" )
+ZINIT[STATES___local/zinit4]=1
 
 # inform prezto that the compdef function is available.
 zstyle ':prezto:module:completion' loaded 1

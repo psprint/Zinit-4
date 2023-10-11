@@ -990,7 +990,7 @@ ZINIT[EXTENDED_GLOB]=""
 
     local p user plugin
     for p in "${plugins[@]}"; do
-        [[ "${p:t}" = "custom" || "${p:t}" = "_local---zinit" ]] && continue
+        [[ "${p:t}" = "custom" || "${p:t}" = "_local---zinit4" ]] && continue
 
         .zinit-any-to-user-plugin "${p:t}"
         user="${reply[-2]}" plugin="${reply[-1]}"
@@ -1562,7 +1562,7 @@ print -- "\nAvailable ice-modifiers:\n\n${ice_order[*]}"
      local i
      +zi-log '{m} {b}Plugins{rst}'
      for i in "${(o)filtered[@]}"; do
-         [[ "$i" = "local/zinit" ]] && continue
+         [[ "$i" = "_local/zinit4" ]] && continue
          local is_loaded='{error}U'
          (( ZINIT[STATES__${i}] )) && is_loaded="{happy}L"
          +zi-log -C2 -- $is_loaded{rst} $i
@@ -1711,7 +1711,7 @@ z4 ice ${output[*]}; zinit "
     local p uspl1
     for p in ${plugins[@]}; do
         uspl1=${p:t}
-        [[ $uspl1 = custom || $uspl1 = _local---zinit ]] && continue
+        [[ $uspl1 = custom || $uspl1 = _local---zinit4 ]] && continue
 
         pushd "$p" >/dev/null || continue
         if [[ -d .git ]]; then
@@ -1884,7 +1884,7 @@ z4 ice ${output[*]}; zinit "
 .zinit-show-all-reports() {
     local i
     for i in "${ZINIT_REGISTERED_PLUGINS[@]}"; do
-        [[ "$i" = "_local/zinit" ]] && continue
+        [[ "$i" = "_local/zinit4" ]] && continue
         .zinit-show-report "$i"
     done
 } # ]]]
@@ -2169,7 +2169,7 @@ z4 ice ${output[*]}; zinit "
     +zi-log "Plugin directory: {file}${ZINIT[PLUGINS_DIR]}{rst}"
     +zi-log "Completions directory: {file}${ZINIT[COMPLETIONS_DIR]}{rst}"
 
-    # Without _zlocal/zinit
+    # Without _local/zinit4
     +zi-log "Loaded plugins: {num}$(( ${#ZINIT_REGISTERED_PLUGINS[@]} - 1 )){rst}"
 
     # Count light-loaded plugins
@@ -2178,20 +2178,20 @@ z4 ice ${output[*]}; zinit "
     for s in "${(@v)ZINIT[(I)STATES__*]}"; do
         [[ "$s" = 1 ]] && (( light ++ ))
     done
-    # Without _zlocal/zinit
+    # Without _local/zinit4
     +zi-log "Light loaded: {num}$(( light - 1 )){rst}"
 
-    # Downloaded plugins, without _zlocal/zinit, custom
+    # Downloaded plugins, without _local/zinit4, custom
     typeset -a plugins
     plugins=( "${ZINIT[PLUGINS_DIR]}"/*(DN) )
     +zi-log "Downloaded plugins: {num}$(( ${#plugins} - 1 )){rst}"
 
-    # Number of enabled completions, with _zlocal/zinit
+    # Number of enabled completions, with _local/zinit4
     typeset -a completions
     completions=( "${ZINIT[COMPLETIONS_DIR]}"/_[^_.]*~*.zwc(DN) )
     +zi-log "Enabled completions: {num}${#completions[@]}{rst}"
 
-    # Number of disabled completions, with _zlocal/zinit
+    # Number of disabled completions, with _local/zinit4
     completions=( "${ZINIT[COMPLETIONS_DIR]}"/[^_.]*~*.zwc(DN) )
     +zi-log "Disabled completions: {num}${#completions[@]}{rst}"
 
@@ -2830,7 +2830,7 @@ z4 ice ${output[*]}; zinit "
         for repo ( $files ) {
             uspl=${repo:t}
             # Two special cases
-            [[ $uspl = custom || $uspl = _local---zinit ]] && continue
+            [[ $uspl = custom || $uspl = _local---zinit4 ]] && continue
 
             # Check if repository has a remote set
             if [[ -f $repo/.git/config ]] {
@@ -3348,7 +3348,7 @@ z4 ice ${output[*]}; zinit "
         pd=${repo:t}
 
         # Two special cases
-        [[ $pd = custom || $pd = _local---zinit ]] && continue
+        [[ $pd = custom || $pd = _local---zinit4 ]] && continue
 
         .zinit-any-colorify-as-uspl2 "$pd"
 
